@@ -17,6 +17,7 @@ model User {
   email     String   @unique
   password  String
   token     Token[]
+  profile   Profile?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -31,7 +32,29 @@ model Token {
   createdAt DateTime    @default(now())
 }
 
+model Profile {
+  id              String   @id @default(uuid())
+  bio             String
+  socialMediaLink String[]
+  address         String
+  media           Media?
+  user            User     @relation(fields: [userID], references: [id])
+  userID          String   @unique
+}
+
+model Media {
+  id        String    @id @default(uuid())
+  name      String
+  type      MediaType
+  profile   Profile   @relation(fields: [profileID], references: [id])
+  profileID String    @unique
+}
+
 enum TokenStatus {
   USED
   UN_USED
+}
+
+enum MediaType {
+  PROFILE_PICTURE
 }
