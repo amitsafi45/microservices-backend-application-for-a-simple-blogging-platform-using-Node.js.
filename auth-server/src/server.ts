@@ -1,25 +1,20 @@
-import 'dotenv/config'
 import express from 'express'
-import { prisma } from './config/database.config'
-const sever=express()
+import middleware from './middlewares';
+import EnvironmentConfiguration from './config/env.config';
+async function bootStrap() {
+  const app = express();
 
-
-
-async function main() {
- // const y=await prisma.user.create({data:{username:"lll",email:"ddd@g.com",password:"Admin@123"}})
-  // ... you will write your Prisma Client queries here
-  //console.log(y)
-  sever.listen(process.env.PORT,()=>{
-    console.log(`Auth-server listening at ${process.env.PORT}`)
-})
-}
-
-main()
-  .then(async () => {
+  await middleware(app);
+  app.listen(EnvironmentConfiguration.PORT, async () => {
    
-  })
-  .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  })
+      console.info(
+        `Server started at http://localhost:${EnvironmentConfiguration.PORT}`
+      );
+  });
+}
+try {
+  bootStrap();
+} catch (error) {
+  console.log(error);
+  process.exit(1);
+}
