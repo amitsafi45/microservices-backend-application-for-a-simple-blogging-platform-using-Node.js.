@@ -18,5 +18,5 @@ export const Message = {
     server:"Internal Server Error",
     unAuthorized: 'You are not authorized to perform this action',
     mediaUploaded: 'Media Uploaded Successfully',
-    
+    welcomeMessage:"welcome in auth server"
   };
