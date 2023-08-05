@@ -20,6 +20,8 @@ model User {
   profile   Profile?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("user")
 }
 
 model Token {
@@ -28,18 +30,22 @@ model Token {
   expiresAt String
   status    TokenStatus
   user      User        @relation(fields: [userID], references: [id])
-  userID    String
+  userID    String      @map("user_id")
   createdAt DateTime    @default(now())
+
+  @@map("token")
 }
 
 model Profile {
   id              String   @id @default(uuid())
   bio             String
-  socialMediaLink String[]
+  socialMediaLink String[] @map("social_media_link")
   address         String
   media           Media?
   user            User     @relation(fields: [userID], references: [id])
-  userID          String   @unique
+  userID          String   @unique @map("user_id")
+
+  @@map("profile")
 }
 
 model Media {
@@ -47,7 +53,9 @@ model Media {
   name      String
   type      MediaType
   profile   Profile   @relation(fields: [profileID], references: [id])
-  profileID String    @unique
+  profileID String    @unique @map("profile_id")
+
+  @@map("media")
 }
 
 enum TokenStatus {
