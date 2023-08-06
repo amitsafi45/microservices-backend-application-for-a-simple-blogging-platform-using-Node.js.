@@ -26,6 +26,13 @@ class UserController implements IUserController {
       verifyUser.email
     );
     await tokenService.create(refreshToken, ONE_DAY_AFTER, verifyUser.id);
+    res.cookie('jwt',refreshToken,{
+      httpOnly:true, //accessible only by web server
+      secure:true,//https
+      sameSite:'none', //cross-site cookie
+      maxAge:7*24*60*60*1000 //cookie expiry:set to match refresh token expire time
+
+    })
     res.send(
       createResponse<object>(
         "success",

@@ -1,3 +1,7 @@
 export enum Environment{
-    DEVELOPMENT="DEVELOPMENT"
+    DEVELOPMENT="DEVELOPMENT",
+    PRODUCTION="PRODUCTION"
+}
+export enum Mode{
+    BEARER="BEARER"
 }
