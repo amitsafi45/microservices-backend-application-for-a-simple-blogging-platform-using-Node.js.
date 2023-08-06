@@ -4,7 +4,7 @@ import { StatusCodes } from "../constants/statusCodes";
 
 class PingController {
   ping(req: Request, res: Response):void {
-    const response = new ReturnResponse(
+    const response =  ReturnResponse.getInstance(
       "success",
       StatusCodes.SUCCESS,
       "Pong"

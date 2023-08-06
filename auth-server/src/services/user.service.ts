@@ -7,13 +7,14 @@ import {
   deletedMessage,
   getNotFoundMessage,
 } from "../utils/responseMessage.utils";
+import BcryptService from "../utils/bcrypt.utils";
 export class UserService implements IUserService {
   async register(data: RegisterDTO): Promise<void> {
     await prisma.user.create({
       data: {
         username: data.username,
         email: data.email,
-        password: data.password,
+        password:await BcryptService.hash(data.password),
       },
     });
   }

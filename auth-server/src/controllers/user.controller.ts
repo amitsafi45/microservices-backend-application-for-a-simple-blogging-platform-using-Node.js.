@@ -17,38 +17,51 @@ class UserController implements IUserController {
   }
   async register(req: Request, res: Response): Promise<void> {
     await this.userService.register(req.body);
-    const response = new ReturnResponse(
-      "success",
-      StatusCodes.SUCCESS,
-      CreatedMessage("User")
-    );
+    const response=ReturnResponse.getInstance("success",StatusCodes.SUCCESS,CreatedMessage("User"))
+    // const response = new ReturnResponse(
+    //   "success",
+    //   StatusCodes.SUCCESS,
+    //   CreatedMessage("User")
+    // );
     res.send(response);
   }
   async get(req: Request, res: Response): Promise<void> {
     const data = await this.userService.get(req.params.userID);
-    const response = new ReturnResponse(
-      "success",
+    // const response = new ReturnResponse(
+    //   "success",
+    //   StatusCodes.SUCCESS,
+    //   FetchMessage("User"),
+    //   data
+    // );
+    const response =ReturnResponse.getInstance(
+        "success",
       StatusCodes.SUCCESS,
       FetchMessage("User"),
       data
-    );
+    )
     res.send(response);
   }
   async gets(req: Request, res: Response): Promise<void> {
     const users = await this.userService.gets();
-
-    const response = new ReturnResponse(
+    const response =ReturnResponse.getInstance(
       "success",
       StatusCodes.SUCCESS,
       FetchMessage("List of user"),
       undefined,
       users
-    );
+  )
+    // const response = new ReturnResponse(
+    //   "success",
+    //   StatusCodes.SUCCESS,
+    //   FetchMessage("List of user"),
+    //   undefined,
+    //   users
+    // );
     res.json(response);
   }
   async delete(req: Request, res: Response): Promise<void> {
     await this.userService.delete(req.params.userID);
-    const response = new ReturnResponse(
+    const response = ReturnResponse.getInstance(
       "success",
       StatusCodes.SUCCESS,
       deletedMessage("User")
@@ -57,7 +70,7 @@ class UserController implements IUserController {
   }
   async update(req: Request, res: Response): Promise<void> {
     await this.userService.update(req.body);
-    const response = new ReturnResponse(
+    const response =  ReturnResponse.getInstance(
       "success",
       StatusCodes.SUCCESS,
       UpdatedMessage("User")

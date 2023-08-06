@@ -18,10 +18,9 @@ model User {
   password  String
   token     Token[]
   profile   Profile?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime?
-  deletedAt DateTime? // Soft delete field
-
+  createdAt       DateTime?  @map("created_at")
+  updatedAt       DateTime?  @map("updated_at")
+  deletedAt       DateTime?   @map("deleted_at")
   @@map("user")
 }
 
@@ -32,10 +31,9 @@ model Token {
   status    TokenStatus
   user      User        @relation(fields: [userID], references: [id])
   userID    String      @map("user_id")
-  createdAt DateTime?    
-  updatedAt DateTime?
-  deletedAt DateTime?
-
+  createdAt       DateTime?  @map("created_at")
+  updatedAt       DateTime?  @map("updated_at")
+  deletedAt       DateTime?   @map("deleted_at")
   @@map("token")
 }
 
@@ -47,22 +45,22 @@ model Profile {
   media           Media?
   user            User      @relation(fields: [userID], references: [id])
   userID          String    @unique @map("user_id")
-  createdAt       DateTime?  
-  updatedAt       DateTime?
-  deletedAt       DateTime?
+  createdAt       DateTime?  @map("created_at")
+  updatedAt       DateTime?  @map("updated_at")
+  deletedAt       DateTime?   @map("deleted_at")
 
   @@map("profile")
 }
 
-model Media {
+model Media  {
   id        String    @id @default(uuid())
   name      String
   type      MediaType
   profile   Profile   @relation(fields: [profileID], references: [id])
   profileID String    @unique @map("profile_id")
-  createdAt DateTime?
-  updatedAt DateTime?
-  deletedAt DateTime?
+  createdAt       DateTime?  @map("created_at")
+  updatedAt       DateTime?  @map("updated_at")
+  deletedAt       DateTime?   @map("deleted_at")
 
   @@map("media")
 }
