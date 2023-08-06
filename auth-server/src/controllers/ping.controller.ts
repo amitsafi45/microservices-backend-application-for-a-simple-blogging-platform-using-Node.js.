@@ -3,7 +3,7 @@ import { ReturnResponse } from "../utils/response";
 import { StatusCodes } from "../constants/statusCodes";
 
 class PingController {
-  ping(req: Request, res: Response) {
+  ping(req: Request, res: Response):void {
     const response: ReturnResponse = new ReturnResponse(
       "success",
       StatusCodes.SUCCESS,

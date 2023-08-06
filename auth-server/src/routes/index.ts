@@ -1,6 +1,7 @@
 import { Router } from "express"
 import { Message } from "../constants/message"
 import pingRoutes from './ping.routes'
+import userRoutes from './user.routes'
 export type Route = {
     path: string
     route: Router
@@ -9,11 +10,14 @@ export type Route = {
   const router = Router()
   const routes: Route[] = [
     {
-      path: '/ping',
+      path: "/ping",
       route: pingRoutes,
     },
-  
-  ]
+    {
+      path: "/user",
+      route: userRoutes,
+    },
+  ];
   
   // *Instantiate all the routes
   routes.forEach((route) => {
