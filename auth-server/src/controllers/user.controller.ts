@@ -35,7 +35,7 @@ class UserController implements IUserController {
     res.send(response);
   }
   async gets(req: Request, res: Response): Promise<void> {
-    const users=await this.userService.gets()
+    const users = await this.userService.gets();
 
     const response = new ReturnResponse(
       "success",
