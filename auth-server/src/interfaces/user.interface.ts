@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { RegisterDTO, UpdateRegisterDTO } from "../dtos/user.dto";
+import { LoginDTO, RegisterDTO, UpdateRegisterDTO } from "../dtos/user.dto";
 import { User } from "@prisma/client";
 export interface IUser{
    id:string,
@@ -14,6 +14,7 @@ export interface IUserController {
   delete(req: Request, res: Response): void;
   gets(req: Request, res: Response): void;
   update(req: Request, res: Response):void;
+  login(req: Request, res: Response):void;
 }
 export interface IUserService {
   register(data: RegisterDTO): void;
@@ -21,4 +22,5 @@ export interface IUserService {
   get(id:string):Promise<IUser>
   delete(id:string):Promise<string>
   update(data:UpdateRegisterDTO):void
+  userVerify(data:LoginDTO):Promise<IUser>
 }

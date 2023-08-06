@@ -1,10 +1,14 @@
 import { Router } from "express";
 import userController from "../controllers/user.controller";
-import { RegisterDTO, UpdateRegisterDTO } from "../dtos/user.dto";
+import { LoginDTO, RegisterDTO, UpdateRegisterDTO } from "../dtos/user.dto";
 import RequestValidator from "../middlewares/RequestValidator.middleware";
 import { catchAsync } from "../utils/catchAsync";
 
 const router = Router();
+router.post('/login',
+RequestValidator.validate(LoginDTO),
+catchAsync(userController.login.bind(userController))
+)
 router.post(
   "/register",
   RequestValidator.validate(RegisterDTO),

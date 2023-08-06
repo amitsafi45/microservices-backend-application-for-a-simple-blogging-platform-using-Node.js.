@@ -1,4 +1,4 @@
-import { RegisterDTO, UpdateRegisterDTO } from "../dtos/user.dto";
+import { LoginDTO, RegisterDTO, UpdateRegisterDTO } from "../dtos/user.dto";
 import { IUser, IUserService } from "../interfaces/user.interface";
 import { prisma } from "../config/database.config";
 import { User } from "@prisma/client";
@@ -8,6 +8,7 @@ import {
   getNotFoundMessage,
 } from "../utils/responseMessage.utils";
 import BcryptService from "../utils/bcrypt.utils";
+import { Message } from "../constants/message";
 export class UserService implements IUserService {
   private static _instance: UserService;
   private constructor() {}
@@ -85,5 +86,20 @@ export class UserService implements IUserService {
     if (!user) {
       throw HttpException.notFound(getNotFoundMessage("User"));
     }
+  }
+  async userVerify(data:LoginDTO):Promise<IUser>{
+    const user=await prisma.user.findFirst({
+      where:{
+        email:data.email
+      }
+    })
+    if(!user){
+      throw HttpException.badRequest(Message.emailOrPassword)
+    }
+    const verify=await BcryptService.compare(data.password,user.password)
+    if(!verify){
+      throw HttpException.badRequest(Message.emailOrPassword)
+    }
+    return user
   }
 }

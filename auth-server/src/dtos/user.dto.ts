@@ -28,3 +28,12 @@ export class UpdateRegisterDTO {
   @IsEmail()
   email: string;
 }
+export class  LoginDTO{
+  @IsNotEmpty()
+   @IsEmail()
+   email:string
+
+   @IsNotEmpty()
+   @IsString()
+   password:string 
+}
