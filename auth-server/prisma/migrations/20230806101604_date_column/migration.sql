@@ -1,0 +1,11 @@
+-- AlterTable
+ALTER TABLE "media" ALTER COLUMN "createdAt" DROP NOT NULL,
+ALTER COLUMN "createdAt" DROP DEFAULT;
+
+-- AlterTable
+ALTER TABLE "profile" ALTER COLUMN "createdAt" DROP NOT NULL,
+ALTER COLUMN "createdAt" DROP DEFAULT;
+
+-- AlterTable
+ALTER TABLE "token" ALTER COLUMN "createdAt" DROP NOT NULL,
+ALTER COLUMN "createdAt" DROP DEFAULT;

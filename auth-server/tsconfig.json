@@ -16,10 +16,8 @@
     "strictPropertyInitialization": false,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "typeRoots": [
-      "./node_module/@types",
-      "./src/types"
-],
+    "alwaysStrict": true,
+    "typeRoots": ["./node_module/@types", "./src/types"]
   },
 
   "include": ["src/**/*.ts"],

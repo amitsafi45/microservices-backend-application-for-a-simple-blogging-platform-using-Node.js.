@@ -10,3 +10,6 @@ export const getNotFoundMessage = (title: string) => {
   export const CreatedMessage = (title: string) => {
     return `${title} created successfully`;
   };
+  export const FetchMessage = (title: string) => {
+    return `${title} fetch successfully`;
+  };

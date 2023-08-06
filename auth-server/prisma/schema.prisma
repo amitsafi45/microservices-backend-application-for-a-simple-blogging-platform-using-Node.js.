@@ -13,13 +13,14 @@ datasource db {
 model User {
   id String @id @default(uuid())
 
-  username  String   @db.VarChar(20)
-  email     String   @unique
+  username  String    @db.VarChar(20)
+  email     String    @unique
   password  String
   token     Token[]
   profile   Profile?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime? // Soft delete field
 
   @@map("user")
 }
@@ -31,19 +32,24 @@ model Token {
   status    TokenStatus
   user      User        @relation(fields: [userID], references: [id])
   userID    String      @map("user_id")
-  createdAt DateTime    @default(now())
+  createdAt DateTime?    
+  updatedAt DateTime?
+  deletedAt DateTime?
 
   @@map("token")
 }
 
 model Profile {
-  id              String   @id @default(uuid())
+  id              String    @id @default(uuid())
   bio             String
-  socialMediaLink String[] @map("social_media_link")
+  socialMediaLink String[]  @map("social_media_link")
   address         String
   media           Media?
-  user            User     @relation(fields: [userID], references: [id])
-  userID          String   @unique @map("user_id")
+  user            User      @relation(fields: [userID], references: [id])
+  userID          String    @unique @map("user_id")
+  createdAt       DateTime?  
+  updatedAt       DateTime?
+  deletedAt       DateTime?
 
   @@map("profile")
 }
@@ -54,6 +60,9 @@ model Media {
   type      MediaType
   profile   Profile   @relation(fields: [profileID], references: [id])
   profileID String    @unique @map("profile_id")
+  createdAt DateTime?
+  updatedAt DateTime?
+  deletedAt DateTime?
 
   @@map("media")
 }
