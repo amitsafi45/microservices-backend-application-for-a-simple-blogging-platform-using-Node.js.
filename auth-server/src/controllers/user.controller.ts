@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "../constants/statusCodes";
-import { IUserController } from "../interfaces/user.interface";
+import { IUser, IUserController } from "../interfaces/user.interface";
 import { UserService } from "../services/user.service";
-import { ReturnResponse } from "../utils/response";
+import { ReturnResponse, createResponse } from "../utils/response";
 import {
   CreatedMessage,
   FetchMessage,
@@ -11,72 +11,59 @@ import {
 } from "../utils/responseMessage.utils";
 
 class UserController implements IUserController {
+  
   private userService: UserService;
   constructor(userServices: UserService) {
     this.userService = userServices;
   }
   async register(req: Request, res: Response): Promise<void> {
     await this.userService.register(req.body);
-    const response=ReturnResponse.getInstance("success",StatusCodes.SUCCESS,CreatedMessage("User"))
-    // const response = new ReturnResponse(
-    //   "success",
-    //   StatusCodes.SUCCESS,
-    //   CreatedMessage("User")
-    // );
-    res.send(response);
+   
+    res.send(createResponse<string>("success",
+    StatusCodes.SUCCESS,
+    CreatedMessage("User"))
+    );
   }
   async get(req: Request, res: Response): Promise<void> {
     const data = await this.userService.get(req.params.userID);
-    // const response = new ReturnResponse(
-    //   "success",
-    //   StatusCodes.SUCCESS,
-    //   FetchMessage("User"),
-    //   data
-    // );
-    const response =ReturnResponse.getInstance(
-        "success",
+   
+    res.send(createResponse<IUser>(
+      "success",
       StatusCodes.SUCCESS,
       FetchMessage("User"),
-      data
-    )
-    res.send(response);
+      data)
+    );
   }
   async gets(req: Request, res: Response): Promise<void> {
     const users = await this.userService.gets();
-    const response =ReturnResponse.getInstance(
+
+   
+    res.send(createResponse<IUser>(
       "success",
       StatusCodes.SUCCESS,
       FetchMessage("List of user"),
       undefined,
-      users
-  )
-    // const response = new ReturnResponse(
-    //   "success",
-    //   StatusCodes.SUCCESS,
-    //   FetchMessage("List of user"),
-    //   undefined,
-    //   users
-    // );
-    res.json(response);
+      users)
+    );
   }
   async delete(req: Request, res: Response): Promise<void> {
     await this.userService.delete(req.params.userID);
-    const response = ReturnResponse.getInstance(
+   
+    res.send(createResponse<string>(
       "success",
       StatusCodes.SUCCESS,
-      deletedMessage("User")
+      deletedMessage("User"))
     );
-    res.send(response);
   }
   async update(req: Request, res: Response): Promise<void> {
     await this.userService.update(req.body);
-    const response =  ReturnResponse.getInstance(
+  
+    res.send(createResponse<string>(
       "success",
       StatusCodes.SUCCESS,
-      UpdatedMessage("User")
+      UpdatedMessage("User"))
     );
-    res.send(response);
   }
 }
-const userService = new UserService();
+const userService =UserService.getInstance();
 export default new UserController(userService);

@@ -9,12 +9,21 @@ import {
 } from "../utils/responseMessage.utils";
 import BcryptService from "../utils/bcrypt.utils";
 export class UserService implements IUserService {
+  private static _instance: UserService;
+  private constructor() {}
+
+  public static getInstance(): UserService {
+    if (!UserService._instance) {
+      UserService._instance = new UserService();
+    }
+    return UserService._instance;
+  }
   async register(data: RegisterDTO): Promise<void> {
     await prisma.user.create({
       data: {
         username: data.username,
         email: data.email,
-        password:await BcryptService.hash(data.password),
+        password: await BcryptService.hash(data.password),
       },
     });
   }
