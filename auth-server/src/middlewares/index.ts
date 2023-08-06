@@ -12,7 +12,7 @@ const middleware = async (app: Application) => {
     app.use(rateLimiter)
     app.use(cors({ origin: "*" }));
     app.use(express.json());
-    app.use(router)
+    app.use('/api/auth',router)
     app.use(errorHandler)
 }
 export default middleware

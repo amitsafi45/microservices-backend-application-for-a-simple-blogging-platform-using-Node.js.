@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { Message } from "../constants/message"
-
+import pingRoutes from './ping.routes'
 export type Route = {
     path: string
     route: Router
@@ -8,10 +8,10 @@ export type Route = {
   
   const router = Router()
   const routes: Route[] = [
-    // {
-    //   path: '/auth',
-    //   route: authRoutes,
-    // },
+    {
+      path: '/ping',
+      route: pingRoutes,
+    },
   
   ]
   
