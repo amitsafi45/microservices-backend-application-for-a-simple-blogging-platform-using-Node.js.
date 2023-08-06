@@ -6,56 +6,36 @@
 import { Token, User } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../config/database.config";
- class TokenService {
- 
-  async create(
-    userToken: string,
-    expiresAt:Date,
-    userID: string
-  ) {
-
-   
-   await prisma.token.create({data:{
-    token:userToken,
-    status:"UN_USED",
-    expiresAt:expiresAt,
-    userID:userID
-    
-   }})
-    
-   
-    
+import HttpException from "../utils/HttpException";
+import { Message } from "../constants/message";
+class TokenService {
+  async create(userToken: string, expiresAt: Date, userID: string) {
+    await prisma.token.create({
+      data: {
+        token: userToken,
+        status: "UN_USED",
+        expiresAt: expiresAt,
+        userID: userID,
+      },
+    });
   }
 
-//   async update(userToken: string, status: TokenStatus) {
-//     return await this.tokenRepository.update(
-//       { token: userToken },
-//       { status: status }
-//     );
-//   }
-
-//   async inactiveAllActiveTokens(admin: Admin) {
-//       return await this.tokenRepository.update(
-//         {
-//           admin: {
-//             id: admin.id,
-//           },
-//           status: TokenStatus.ACTIVE,
-//         },
-//         { status: TokenStatus.INACTIVE }
-//       );
-//      }
-
-//   async isValidRefreshToken(token: string): Promise<boolean> {
-//     const refreshToken = await this.tokenRepository.findOne({
-//       where: {
-//         token,
-//       },
-//     });
-
-//     if (!refreshToken || refreshToken.status === TokenStatus.INACTIVE)
-//       return false;
-//     return true;
-//   }
+  async refreshToken(id:string,refreshToken:string){
+   const findToken=await prisma.token.findFirst({
+   where:{
+    userID:id,
+    token:refreshToken,
+    status:"UN_USED"
+   },
+   include:{
+     user:true
+   }
+   })
+   if(!findToken){
+    throw HttpException.badRequest(Message.unAuthorized)
+   }
+   findToken.status="USED"
+   return findToken
+  }
 }
-export default new TokenService()
+export default new TokenService();

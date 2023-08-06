@@ -7,6 +7,7 @@ export const Message = {
     invalidCredentials: "Invalid credentials",
     emailOrPhoneAlreadyInUse: "Email or phone already in use",
     loginSuccessfully: "Login successfully",
+    userRefresh:"user refresh Successfully",
     invalidOTP: "Invalid OTP",
     OTPExpired: "OTP has expired",
     accountVerified: "Account verified successfully",

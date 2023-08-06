@@ -12,6 +12,9 @@ import {
 import tokenService from "../services/token.service";
 import webToken from "../utils/webToken.utils";
 import { Message } from "../constants/message";
+import HttpException from "../utils/HttpException";
+import EnvironmentConfiguration from "../config/env.config";
+import { decode } from "jsonwebtoken";
 class UserController implements IUserController {
   private userService: UserService;
   constructor(userServices: UserService) {
@@ -20,11 +23,13 @@ class UserController implements IUserController {
 
   async login(req: Request, res: Response): Promise<void> {
     const verifyUser = await this.userService.userVerify(req.body);
-    const ONE_DAY_AFTER = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
+    
     const { accessToken, refreshToken } = webToken.generateTokens(
       verifyUser,
       verifyUser.email
     );
+    const ONE_DAY_AFTER = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
+
     await tokenService.create(refreshToken, ONE_DAY_AFTER, verifyUser.id);
     res.cookie('jwt',refreshToken,{
       httpOnly:true, //accessible only by web server
@@ -46,6 +51,49 @@ class UserController implements IUserController {
       )
     );
   }
+
+
+  async refresh(req: Request, res: Response):Promise<void>{
+    const cookie=req.cookies
+    if(!cookie.jwt){
+      throw HttpException.forbidden(Message.unAuthorized)
+    }
+    const refreshTokens=cookie.jwt
+   const checking=webToken.verify(refreshTokens,EnvironmentConfiguration.REFRESH_TOKEN_SECRET)
+    if(!checking){
+      throw HttpException.forbidden("Forbidden")
+    }
+    const decodedValue=JSON.parse(atob(refreshTokens))
+    const {id,email,username,...rest}=await this.userService.get(decodedValue.id)
+    const { accessToken, refreshToken } = webToken.generateTokens(
+      {id,email},
+      email
+    );
+    const ONE_DAY_AFTER = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
+
+    await tokenService.create(refreshToken, ONE_DAY_AFTER, id);
+    res.cookie('jwt',refreshToken,{
+      httpOnly:true, //accessible only by web server
+      secure:true,//https
+      sameSite:'none', //cross-site cookie
+      maxAge:7*24*60*60*1000 //cookie expiry:set to match refresh token expire time
+
+    })
+    res.send(
+      createResponse<object>(
+        "success",
+        StatusCodes.ACCEPTED,
+        Message.userRefresh,
+        {
+          token: accessToken,
+          email: email,
+          username:username,
+        }
+      )
+    );
+
+  }
+
 
   async register(req: Request, res: Response): Promise<void> {
     await this.userService.register(req.body);

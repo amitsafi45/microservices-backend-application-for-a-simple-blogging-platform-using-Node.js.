@@ -9,6 +9,11 @@ router.post('/login',
 RequestValidator.validate(LoginDTO),
 catchAsync(userController.login.bind(userController))
 )
+
+router.get('/refresh',
+catchAsync(userController.refresh.bind(userController))
+)
+
 router.post(
   "/register",
   RequestValidator.validate(RegisterDTO),
