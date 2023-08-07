@@ -1,6 +1,21 @@
-import 'dotenv/config'
 import express from 'express'
-const sever=express()
-sever.listen(process.env.PORT,()=>{
-    console.log(`Blogging-server listening at ${process.env.PORT}`)
-})
+import middleware from './middlewares';
+import EnvironmentConfiguration from './config/env.config';
+async function bootStrap() {
+  const app = express();
+
+  await middleware(app);
+  app.listen(EnvironmentConfiguration.PORT, async () => {
+   
+      console.info(
+        `Server started at http://localhost:${EnvironmentConfiguration.PORT}`
+      );
+  });
+}
+try {
+  bootStrap();
+} catch (error) {
+  console.log(error);
+  process.exit(1);
+}
+
