@@ -5,8 +5,9 @@ import HttpException from '../utils/HttpException'
 import { createResponse } from '../utils/response';
 import { StatusCodes } from 'http-status-codes';
 import { Message } from '../constants/message';
+import { iocContainer } from '../utils/IoCContainer.utils';
 
-class MediaController {
+export class MediaController {
   constructor() {}
   async uploadSingle(req: Request, res: Response) {
     res.send(
@@ -23,4 +24,4 @@ class MediaController {
 
 }
 
-export default new MediaController()
+iocContainer.register(MediaController,new MediaController())

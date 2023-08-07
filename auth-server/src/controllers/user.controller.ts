@@ -16,7 +16,7 @@ import EnvironmentConfiguration from "../config/env.config";
 import { decode } from "jsonwebtoken";
 import { iocContainer } from "../utils/IoCContainer.utils";
 import { TokenService } from "../services/token.service";
-class UserController implements IUserController {
+export class UserController implements IUserController {
   public userService: UserService;
   public tokenService:TokenService;
   constructor() {
@@ -160,4 +160,4 @@ class UserController implements IUserController {
     );
   }
 }
-export default new UserController();
+iocContainer.register(UserController,new UserController())

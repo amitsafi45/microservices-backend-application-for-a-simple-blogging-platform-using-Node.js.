@@ -1,34 +1,35 @@
 import { Router } from "express";
-import userController from "../controllers/user.controller";
+import {UserController} from "../controllers/user.controller";
 import { LoginDTO, RegisterDTO, UpdateRegisterDTO } from "../dtos/user.dto";
 import RequestValidator from "../middlewares/RequestValidator.middleware";
 import { catchAsync } from "../utils/catchAsync";
+import { iocContainer } from "../utils/IoCContainer.utils";
 
 const router = Router();
 router.post('/login',
 RequestValidator.validate(LoginDTO),
-catchAsync(userController.login.bind(userController))
+catchAsync(iocContainer.resolve(UserController).login)
 )
 
 router.get('/refresh',
-catchAsync(userController.refresh.bind(userController))
+catchAsync(iocContainer.resolve(UserController).refresh)
 )
 
 router.post(
   "/register",
   RequestValidator.validate(RegisterDTO),
-  catchAsync(userController.register.bind(userController))
+  catchAsync(iocContainer.resolve(UserController).refresh)
 );
 router.patch(
   "/",
   RequestValidator.validate(UpdateRegisterDTO),
-  catchAsync(userController.update.bind(userController))
+  catchAsync(iocContainer.resolve(UserController).update)
 );
-router.get("/", catchAsync(userController.gets.bind(userController)));
-router.get("/:userID", catchAsync(userController.get.bind(userController)));
+router.get("/", catchAsync(iocContainer.resolve(UserController).gets));
+router.get("/:userID", catchAsync(iocContainer.resolve(UserController).get));
 router.delete(
   "/:userID",
-  catchAsync(userController.delete.bind(userController))
+  catchAsync(iocContainer.resolve(UserController).delete)
 );
 
 export default router;
