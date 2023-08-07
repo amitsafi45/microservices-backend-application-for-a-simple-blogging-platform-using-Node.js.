@@ -1,4 +1,6 @@
-import { IsEmail, IsNotEmpty, IsString, IsUUID } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsEmail, IsNotEmpty, IsNotEmptyObject, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator";
+import { MediaDTO } from "./media.dto";
 
 export class RegisterDTO{
    @IsNotEmpty()
@@ -36,4 +38,33 @@ export class  LoginDTO{
    @IsNotEmpty()
    @IsString()
    password:string 
+}
+
+
+export class  Profile{
+   @IsNotEmpty()
+   @IsUUID()
+   userID:string
+
+   @IsOptional()
+   @IsString()
+   bio:string
+
+   @IsOptional()
+   @IsArray()
+   @IsString({each:true})
+   socialMediaLink:string[]
+
+   @IsOptional()
+   @IsNotEmptyObject()
+   @ValidateNested()
+   @Type(()=>MediaDTO)
+   media:MediaDTO
+
+
+   @IsOptional()
+   @IsString()
+   address:string
+
+
 }

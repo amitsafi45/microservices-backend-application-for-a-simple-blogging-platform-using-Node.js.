@@ -1,7 +1,8 @@
 import { Router } from "express";
-import pingController from "../controllers/ping.controller";
+import {PingController} from "../controllers/ping.controller";
 import { catchAsync } from "../utils/catchAsync";
 import Authentication from "../middlewares/Authentication.middleware";
+import { iocContainer } from "../utils/IoCContainer.utils";
 const router=Router()
-router.get('/',pingController.ping)
+router.get('/',iocContainer.resolve(PingController).ping)
 export default router

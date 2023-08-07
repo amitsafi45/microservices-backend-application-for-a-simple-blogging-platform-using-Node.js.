@@ -80,6 +80,12 @@ export class UserService implements IUserService {
       throw HttpException.notFound(getNotFoundMessage("User"));
     }
   }
+
+async updateProfile(){
+  
+}
+
+
   async userVerify(data:LoginDTO):Promise<IUser>{
     const user=await prisma.user.findFirst({
       where:{
