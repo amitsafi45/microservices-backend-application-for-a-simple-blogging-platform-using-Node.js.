@@ -8,6 +8,7 @@ import {
   FetchMessage,
   UpdatedMessage,
   deletedMessage,
+  getNotFoundMessage,
 } from "../utils/responseMessage.utils";
 import webToken from "../utils/webToken.utils";
 import { Message } from "../constants/message";
@@ -16,9 +17,12 @@ import EnvironmentConfiguration from "../config/env.config";
 import { decode } from "jsonwebtoken";
 import { iocContainer } from "../utils/IoCContainer.utils";
 import { TokenService } from "../services/token.service";
+import { ProfileDTO } from "../dtos/user.dto";
+import { MediaService } from "../services/media.service";
 export class UserController implements IUserController {
   public userService: UserService;
   public tokenService:TokenService;
+  public mediaService: MediaService;
   constructor() {
     this.userService = iocContainer.resolve(UserService);
     this.tokenService=iocContainer.resolve(TokenService) // Use the IOC container
@@ -156,6 +160,28 @@ export class UserController implements IUserController {
         "success",
         StatusCodes.SUCCESS,
         UpdatedMessage("User")
+      )
+    );
+
+  }
+  async createProfile(req: Request, res: Response){
+     const data=req.body as ProfileDTO
+     const user=await this.userService.get(data.userID)
+     if(user.profileStatus===true){
+      throw HttpException.badRequest("You have already created profile")
+     }
+     const profile=await this.userService.createProfile(data)
+     try{
+       await this.mediaService.uploadFile(data.media,profile.id)
+     }catch(e:any){
+      console.log(e.message)
+       await this.userService.deleProfile(profile.id)
+     }
+     res.send(
+      createResponse<string>(
+        "success",
+        StatusCodes.SUCCESS,
+        CreatedMessage("Profile")
       )
     );
   }

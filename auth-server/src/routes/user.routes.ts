@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {UserController} from "../controllers/user.controller";
-import { LoginDTO, RegisterDTO, UpdateRegisterDTO } from "../dtos/user.dto";
+import { LoginDTO, ProfileDTO, RegisterDTO, UpdateRegisterDTO } from "../dtos/user.dto";
 import RequestValidator from "../middlewares/RequestValidator.middleware";
 import { catchAsync } from "../utils/catchAsync";
 import { iocContainer } from "../utils/IoCContainer.utils";
@@ -10,6 +10,9 @@ router.post('/login',
 RequestValidator.validate(LoginDTO),
 catchAsync(iocContainer.resolve(UserController).login)
 )
+
+router.post('/profile',RequestValidator.validate(ProfileDTO),catchAsync(iocContainer.resolve(UserController).createProfile))
+
 
 router.get('/refresh',
 catchAsync(iocContainer.resolve(UserController).refresh)

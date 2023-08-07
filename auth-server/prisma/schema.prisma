@@ -13,14 +13,15 @@ datasource db {
 model User {
   id String @id @default(uuid())
 
-  username  String    @db.VarChar(20)
-  email     String    @unique
-  password  String
-  token     Token[]
-  profile   Profile?
-  createdAt DateTime? @default(now()) @map("created_at")
-  updatedAt DateTime? @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  username      String    @db.VarChar(20)
+  email         String    @unique
+  password      String
+  token         Token[]
+  profile       Profile?
+  profileStatus Boolean
+  createdAt     DateTime? @default(now()) @map("created_at")
+  updatedAt     DateTime? @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
 
   @@map("user")
 }
@@ -44,8 +45,7 @@ model Profile {
   bio             String?
   socialMediaLink String[]  @map("social_media_link")
   address         String?
-  media           Media?     @relation(fields: [mediaID], references: [id])
-  mediaID         String    @unique @map("madia_id")
+  media           Media?
   user            User      @relation(fields: [userID], references: [id])
   userID          String    @unique @map("user_id")
   createdAt       DateTime? @default(now()) @map("created_at")
@@ -56,11 +56,11 @@ model Profile {
 }
 
 model Media {
-  id      String    @id @default(uuid())
-  name    String
-  type    MediaType
-  profile Profile?
-
+  id        String    @id @default(uuid())
+  name      String
+  type      MediaType
+  profile   Profile   @relation(fields: [profileID], references: [id])
+  profileID String    @unique @map("profile_id")
   createdAt DateTime? @default(now()) @map("created_at")
   updatedAt DateTime? @map("updated_at")
   deletedAt DateTime? @map("deleted_at")

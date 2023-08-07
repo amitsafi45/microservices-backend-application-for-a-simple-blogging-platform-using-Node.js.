@@ -21,6 +21,8 @@ export class MediaService {
     let newMedia = await prisma.media.create({data:{
       name: data.name,
       type: data.type,
+      profileID:id
+
     }})
     const instance=TransferImage.getInstance()
     instance.setInfo(newMedia.id,newMedia.type,newMedia.name)

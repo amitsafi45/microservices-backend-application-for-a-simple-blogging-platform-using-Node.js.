@@ -41,7 +41,7 @@ export class  LoginDTO{
 }
 
 
-export class  Profile{
+export class  ProfileDTO{
    @IsNotEmpty()
    @IsUUID()
    userID:string

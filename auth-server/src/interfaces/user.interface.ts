@@ -5,7 +5,7 @@ export interface IUser{
    id:string,
    username:string,
    email:string
-
+  profileStatus:boolean
 
 }
 export interface IUserController {

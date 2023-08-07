@@ -1,7 +1,7 @@
-import { LoginDTO, RegisterDTO, UpdateRegisterDTO } from "../dtos/user.dto";
+import { LoginDTO, ProfileDTO, RegisterDTO, UpdateRegisterDTO } from "../dtos/user.dto";
 import { IUser, IUserService } from "../interfaces/user.interface";
 import { prisma } from "../config/database.config";
-import { User } from "@prisma/client";
+import { PrismaClient, Profile, User } from "@prisma/client";
 import HttpException from "../utils/HttpException";
 import {
   deletedMessage,
@@ -18,6 +18,7 @@ export class UserService implements IUserService {
         username: data.username,
         email: data.email,
         password: await BcryptService.hash(data.password),
+        profileStatus:false
       },
     });
   }
@@ -35,13 +36,14 @@ export class UserService implements IUserService {
         id: true,
         email: true,
         username: true,
+        profileStatus:true
         // createdAt:true
       },
     });
     return data;
   }
   async get(id: string): Promise<IUser> {
-    const user = await prisma.user.findFirstOrThrow({
+    const user = await prisma.user.findFirst({
       where: {
         id: id,
       },
@@ -49,6 +51,7 @@ export class UserService implements IUserService {
         email: true,
         username: true,
         id: true,
+        profileStatus:true
       },
     });
     if (!user) {
@@ -81,9 +84,6 @@ export class UserService implements IUserService {
     }
   }
 
-async updateProfile(){
-  
-}
 
 
   async userVerify(data:LoginDTO):Promise<IUser>{
@@ -101,5 +101,25 @@ async updateProfile(){
     }
     return user
   }
+
+
+  async createProfile(profileData:ProfileDTO){
+       return await prisma.profile.create({data:{
+          address:profileData.address,
+          bio:profileData.bio,
+          socialMediaLink:profileData.socialMediaLink,
+          userID:profileData.userID
+
+          
+          }})
+  }
+  async deleProfile(id:string){
+    await prisma.profile.delete({
+      where:{
+        id:id
+      }
+    })
+  }
+
 }
 iocContainer.register(UserService,new UserService())
