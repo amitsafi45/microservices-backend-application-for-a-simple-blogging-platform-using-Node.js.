@@ -1,23 +1,17 @@
-// A registry to store the dependencies
-const dependencyRegistry: { [key: string]: any } = {};
+export class IOCContainer {
+  private services: Map<Function, any> = new Map();
 
-// Decorator to mark classes as injectable
-export function Injectable(): ClassDecorator {
-  return (target: any) => {
-    // Use the class name as the key in the registry
-    dependencyRegistry[target.name] = target;
-  };
-}
+  register<T>(serviceClass: { new (): T }, serviceInstance: T): void {
+    this.services.set(serviceClass, serviceInstance);
+  }
 
-// Decorator to define dependencies for a class constructor
-export function Inject(dependencyName: string):any {
-  return (target: any, propertyKey: string | symbol, parameterIndex: number) => {
-    const className = target.constructor.name;
-    const dependency = dependencyRegistry[dependencyName];
-    if (!dependency) {
-      throw new Error(`Dependency not found: ${dependencyName}`);
+  resolve<T>(serviceClass: { new (): T }): T {
+    const serviceInstance = this.services.get(serviceClass);
+    if (!serviceInstance) {
+      throw new Error(`Service not registered: ${serviceClass.name}`);
     }
-    // Update the constructor to set the dependency at the correct parameter index
-    target[className].prototype[propertyKey][parameterIndex] = new dependency();
-  };
+    return serviceInstance;
+  }
 }
+
+export const iocContainer = new IOCContainer();

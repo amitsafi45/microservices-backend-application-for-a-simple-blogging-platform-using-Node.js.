@@ -9,16 +9,19 @@ import {
   UpdatedMessage,
   deletedMessage,
 } from "../utils/responseMessage.utils";
-import tokenService from "../services/token.service";
 import webToken from "../utils/webToken.utils";
 import { Message } from "../constants/message";
 import HttpException from "../utils/HttpException";
 import EnvironmentConfiguration from "../config/env.config";
 import { decode } from "jsonwebtoken";
+import { iocContainer } from "../utils/IoCContainer.utils";
+import { TokenService } from "../services/token.service";
 class UserController implements IUserController {
-  private userService: UserService;
-  constructor(userServices: UserService) {
-    this.userService = userServices;
+  public userService: UserService;
+  public tokenService:TokenService;
+  constructor() {
+    this.userService = iocContainer.resolve(UserService);
+    this.tokenService=iocContainer.resolve(TokenService) // Use the IOC container
   }
 
   async login(req: Request, res: Response): Promise<void> {
@@ -30,7 +33,7 @@ class UserController implements IUserController {
     );
     const ONE_DAY_AFTER = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
 
-    await tokenService.create(refreshToken, ONE_DAY_AFTER, verifyUser.id);
+    await this.tokenService.create(refreshToken, ONE_DAY_AFTER, verifyUser.id);
     res.cookie('jwt',refreshToken,{
       httpOnly:true, //accessible only by web server
       secure:true,//https
@@ -74,7 +77,7 @@ class UserController implements IUserController {
     );
     const ONE_DAY_AFTER = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
 
-    await tokenService.create(refreshToken, ONE_DAY_AFTER, id);
+    await  this.tokenService.create(refreshToken, ONE_DAY_AFTER, id);
     res.cookie('jwt',refreshToken,{
       httpOnly:true, //accessible only by web server
       secure:true,//https
@@ -157,5 +160,4 @@ class UserController implements IUserController {
     );
   }
 }
-const userService = UserService.getInstance();
-export default new UserController(userService);
+export default new UserController();

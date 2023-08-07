@@ -4,34 +4,32 @@ import { Media } from '@prisma/client'
 import { MediaDTO } from '../dtos/media.dto'
 import HttpException from '../utils/HttpException'
 import { prisma } from '../config/database.config'
-import { transferImageFromTempTOUploadFolder } from '../utils/transferImageFromTempTOUploadFolder.utils'
+import { iocContainer } from '../utils/IoCContainer.utils'
+import { TransferImage } from '../utils/transferImageFromTempTOUploadFolder.utils'
 
 
-const TEMP_FOLDER_PATH = path.join(__dirname, '..', '..', '..', 'public', 'temp')
-
-class MediaService {
-
+export class MediaService {
+  public TEMP_FOLDER_PATH:string
+  constructor(){
+    
+    this.TEMP_FOLDER_PATH = path.join(__dirname, '..', '..', '..', 'public', 'temp')
+  }
   async uploadFile(data: MediaDTO, id: string) {
-    if (!existsSync(path.join(TEMP_FOLDER_PATH, data.type, data.name))) {
+    if (!existsSync(path.join(this.TEMP_FOLDER_PATH, data.type, data.name))) {
       throw HttpException.badRequest('Sorry file does not exists')
     }
     let newMedia = await prisma.media.create({data:{
       name: data.name,
       type: data.type,
     }})
-    // transferImageFromTempTOUploadFolder(newMedia.id,newMedia.type,newMedia.name)
+    const instance=TransferImage.getInstance()
+    instance.setInfo(newMedia.id,newMedia.type,newMedia.name)
+    instance.tempTOUploadFolder()
     return newMedia
   }
 
 
 
-  // async getMedia(email: string, url: string) {
-  //   let folderName = email.replace('@gmail.com', '')
-  //   let fileLocation = path.join(PUBLIC_FOLDER_PATH, folderName, url)
-  //   if (!existsSync(fileLocation)) {
-  //     throw HttpException.badRequest('Sorry file does not exists')
-  //   }
-  //   return createReadStream(fileLocation, { encoding: 'base64' })
-  // }
+ 
 }
-export default new MediaService()
+iocContainer.register(MediaService,new MediaService())

@@ -9,16 +9,9 @@ import {
 } from "../utils/responseMessage.utils";
 import BcryptService from "../utils/bcrypt.utils";
 import { Message } from "../constants/message";
+import { iocContainer } from "../utils/IoCContainer.utils";
 export class UserService implements IUserService {
-  private static _instance: UserService;
-  private constructor() {}
-
-  public static getInstance(): UserService {
-    if (!UserService._instance) {
-      UserService._instance = new UserService();
-    }
-    return UserService._instance;
-  }
+ 
   async register(data: RegisterDTO): Promise<void> {
     await prisma.user.create({
       data: {
@@ -103,3 +96,4 @@ export class UserService implements IUserService {
     return user
   }
 }
+iocContainer.register(UserService,new UserService())
