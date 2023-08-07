@@ -7,7 +7,7 @@ class PingController {
     const response = createResponse<string>(  "success",
     StatusCodes.SUCCESS,
     "Pong");
-
+console.log(res.cookie,'ppppp')
     
     res.send(response);
   }

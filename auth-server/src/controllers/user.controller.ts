@@ -35,7 +35,7 @@ class UserController implements IUserController {
       httpOnly:true, //accessible only by web server
       secure:true,//https
       sameSite:'none', //cross-site cookie
-      maxAge:7*24*60*60*1000 //cookie expiry:set to match refresh token expire time
+      maxAge: 7 * 24 * 60 * 60 * 1000 //cookie expiry:set to match refresh token expire time
 
     })
     res.send(
@@ -54,10 +54,13 @@ class UserController implements IUserController {
 
 
   async refresh(req: Request, res: Response):Promise<void>{
+    // console.log(req.cookies,'gggg');
     const cookie=req.cookies
     if(!cookie.jwt){
+      console.log("first");
       throw HttpException.forbidden(Message.unAuthorized)
     }
+    console.log("pass");
     const refreshTokens=cookie.jwt
    const checking=webToken.verify(refreshTokens,EnvironmentConfiguration.REFRESH_TOKEN_SECRET)
     if(!checking){
