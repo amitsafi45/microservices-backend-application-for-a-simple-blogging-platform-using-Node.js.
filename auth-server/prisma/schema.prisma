@@ -32,7 +32,7 @@ model Token {
   status    TokenStatus
   user      User        @relation(fields: [userID], references: [id])
   userID    String      @map("user_id")
-  createdAt DateTime?   @map("created_at")
+  createdAt DateTime?   @default(now()) @map("created_at")
   updatedAt DateTime?   @map("updated_at")
   deletedAt DateTime?   @map("deleted_at")
 
@@ -44,10 +44,11 @@ model Profile {
   bio             String
   socialMediaLink String[]  @map("social_media_link")
   address         String
-  media           Media?
+  media           Media     @relation(fields: [mediaID], references: [id])
+  mediaID         String    @unique @map("madia_id")
   user            User      @relation(fields: [userID], references: [id])
   userID          String    @unique @map("user_id")
-  createdAt       DateTime? @map("created_at")
+  createdAt       DateTime? @default(now()) @map("created_at")
   updatedAt       DateTime? @map("updated_at")
   deletedAt       DateTime? @map("deleted_at")
 
@@ -55,12 +56,12 @@ model Profile {
 }
 
 model Media {
-  id        String    @id @default(uuid())
-  name      String
-  type      MediaType
-  profile   Profile   @relation(fields: [profileID], references: [id])
-  profileID String    @unique @map("profile_id")
-  createdAt DateTime? @map("created_at")
+  id      String    @id @default(uuid())
+  name    String
+  type    MediaType
+  profile Profile?
+
+  createdAt DateTime? @default(now()) @map("created_at")
   updatedAt DateTime? @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
@@ -73,5 +74,5 @@ enum TokenStatus {
 }
 
 enum MediaType {
-  PROFILE_PICTURE
+  PROFILE
 }

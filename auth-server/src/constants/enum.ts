@@ -5,3 +5,7 @@ export enum Environment{
 export enum Mode{
     BEARER="BEARER"
 }
+
+export enum MediaType{
+    PROFILE="PROFILE"
+}
