@@ -7,5 +7,5 @@ import { catchAsync } from "../utils/catchAsync";
 
 const router =Router()
 const serviceRegistryContainer=container.resolve(ServiceRegistryController)
-router.post('/',RequestValidator.validate(ApiDetail),catchAsync(serviceRegistryContainer.create.bind(serviceRegistryContainer)))
+router.put('/',RequestValidator.validate(ApiDetail),catchAsync(serviceRegistryContainer.create.bind(serviceRegistryContainer)))
 export default router
