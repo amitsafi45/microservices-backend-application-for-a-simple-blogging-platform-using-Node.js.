@@ -13,4 +13,8 @@ export class GatewayController{
           await this.gatewayService.create(req.body)
           res.send(CreatedMessage("Client register"))
        }
+
+       async update(req:Request,res:Response){
+        await this.gatewayService.update(req.body)
+       }
 }

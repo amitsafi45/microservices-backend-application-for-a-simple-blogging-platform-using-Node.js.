@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { Status } from "../constants/enum";
  export class ApiDetail{
     @IsNotEmpty()
     @IsString()
@@ -8,6 +9,10 @@ import { IsNotEmpty, IsNumber, IsString } from "class-validator";
     @IsString()
     host:string
 
+    @IsNotEmpty()
+    @IsEnum(Status)
+    status:Status
+    
 
     @IsNotEmpty()
     @IsString()

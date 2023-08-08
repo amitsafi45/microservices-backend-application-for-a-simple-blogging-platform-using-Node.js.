@@ -2,10 +2,8 @@ export enum Environment{
     DEVELOPMENT="DEVELOPMENT",
     PRODUCTION="PRODUCTION"
 }
-export enum Mode{
-    BEARER="BEARER"
+export enum Status{
+    LIVE="LIVE",
+    DIE="DIE"
 }
 
-export enum MediaType{
-    PROFILE="PROFILE"
-}
