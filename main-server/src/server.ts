@@ -8,7 +8,7 @@ async function bootStrap() {
   app.listen(EnvironmentConfiguration.PORT, async () => {
    
       console.info(
-        `Server started at http://localhost:${EnvironmentConfiguration.PORT}`
+        `Main-Server started at http://localhost:${EnvironmentConfiguration.PORT}`
       );
   });
 }
