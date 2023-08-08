@@ -1,4 +1,4 @@
-import { ApiDetail } from "../dtos/gateway.dto";
+import { ApiDetail, ServiceStatusDTO } from "../dtos/gateway.dto";
 import { prisma } from "../config/database.config";
 import { autoInjectable } from "tsyringe";
 import HttpException from "../utils/HttpException";
@@ -33,5 +33,19 @@ select:{
         throw HttpException.badRequest("Client not found")
        }
 
+   }
+   async updateStatus(data:ServiceStatusDTO){
+    const client=await prisma.serviceRegistry.update({
+        where:{
+            serviceName:data.serviceName
+        },
+        data:{
+            status:data.status
+        }
+        
+       })
+       if(!client){
+        throw HttpException.badRequest("Client not found")
+       }
    }
 }

@@ -5,7 +5,7 @@ import { rateLimiter } from "../utils/rateLimiter.utils";
 import cors from 'cors'
 import errorHandler from "./error.middleware";
 import clientRoutes from '../routes/gateway.routes'
-import serviceRegistry from '../routes/index'
+import serviceRegistryRoutes from '../routes/serviceRegistry.routes'
 import morgan from 'morgan'
 const middleware = async (app: Application) => {
     app.use(compression());
@@ -14,7 +14,7 @@ const middleware = async (app: Application) => {
     app.use(cors({ origin: "*" }));
 
     app.use(express.json());
-    app.use('/service-registry/api',serviceRegistry)
+    app.use('/service-registry/api',serviceRegistryRoutes)
      app.use('/service/api',clientRoutes)
     app.use(errorHandler)
 }

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ServiceRegistryService } from "../services/serviceRegistry.service";
-import { CreatedMessage } from "../utils/responseMessage.utils";
+import { CreatedMessage, UpdatedMessage } from "../utils/responseMessage.utils";
 import { autoInjectable } from "tsyringe";
 
 @autoInjectable()
@@ -16,5 +16,12 @@ export class ServiceRegistryController{
 
        async update(req:Request,res:Response){
         await this.serviceRegistry.update(req.body)
+        res.send(UpdatedMessage("Client updated"))
+       }
+
+       async updateStatus(req:Request,res:Response){
+        await this.serviceRegistry.updateStatus(req.body)
+        res.send(UpdatedMessage("Client status updated"))
+        
        }
 }

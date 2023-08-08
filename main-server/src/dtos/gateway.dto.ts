@@ -25,3 +25,15 @@ import { Status } from "../constants/enum";
    
 
 }
+
+export class ServiceStatusDTO{
+    @IsNotEmpty()
+    @IsEnum(Status)
+    status:Status
+    
+
+    @IsNotEmpty()
+    @IsString()
+    serviceName:string
+
+}
