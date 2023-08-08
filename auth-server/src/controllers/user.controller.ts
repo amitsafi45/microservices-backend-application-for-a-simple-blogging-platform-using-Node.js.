@@ -20,10 +20,11 @@ import { TokenService } from "../services/token.service";
 import { ProfileDTO } from "../dtos/user.dto";
 import { MediaService } from "../services/media.service";
 export class UserController implements IUserController {
-  public userService: UserService;
+git  public userService:UserService
   public tokenService:TokenService;
   public mediaService: MediaService;
   constructor() {
+    
     this.userService = iocContainer.resolve(UserService);
     this.tokenService=iocContainer.resolve(TokenService) // Use the IOC container
   }
@@ -106,6 +107,7 @@ export class UserController implements IUserController {
 
 
   async register(req: Request, res: Response): Promise<void> {
+    console.log("first")
     await this.userService.register(req.body);
 
     res.send(

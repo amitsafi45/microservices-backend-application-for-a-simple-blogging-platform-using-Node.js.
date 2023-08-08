@@ -4,7 +4,6 @@ import { LoginDTO, ProfileDTO, RegisterDTO, UpdateRegisterDTO } from "../dtos/us
 import RequestValidator from "../middlewares/RequestValidator.middleware";
 import { catchAsync } from "../utils/catchAsync";
 import { iocContainer } from "../utils/IoCContainer.utils";
-
 const router = Router();
 router.post('/login',
 RequestValidator.validate(LoginDTO),
@@ -21,7 +20,7 @@ catchAsync(iocContainer.resolve(UserController).refresh)
 router.post(
   "/register",
   RequestValidator.validate(RegisterDTO),
-  catchAsync(iocContainer.resolve(UserController).refresh)
+  catchAsync(iocContainer.resolve(UserController).register)
 );
 router.patch(
   "/",
