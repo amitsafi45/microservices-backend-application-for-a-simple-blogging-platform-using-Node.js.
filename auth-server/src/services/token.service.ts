@@ -8,7 +8,8 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "../config/database.config";
 import HttpException from "../utils/HttpException";
 import { Message } from "../constants/message";
-import { iocContainer } from "../utils/IoCContainer.utils";
+import { autoInjectable } from "tsyringe";
+@autoInjectable()
 export class TokenService {
   async create(userToken: string, expiresAt: Date, userID: string) {
     await prisma.token.create({
@@ -39,4 +40,3 @@ export class TokenService {
    return findToken
   }
 }
-iocContainer.register(TokenService,new TokenService())

@@ -15,18 +15,22 @@ import { Message } from "../constants/message";
 import HttpException from "../utils/HttpException";
 import EnvironmentConfiguration from "../config/env.config";
 import { decode } from "jsonwebtoken";
-import { iocContainer } from "../utils/IoCContainer.utils";
 import { TokenService } from "../services/token.service";
 import { ProfileDTO } from "../dtos/user.dto";
 import { MediaService } from "../services/media.service";
+import { autoInjectable } from "tsyringe";
+
+@autoInjectable()
 export class UserController implements IUserController {
-git  public userService:UserService
+  public userService:UserService
   public tokenService:TokenService;
   public mediaService: MediaService;
-  constructor() {
-    
-    this.userService = iocContainer.resolve(UserService);
-    this.tokenService=iocContainer.resolve(TokenService) // Use the IOC container
+  
+  constructor(userService:UserService,tokenService:TokenService,mediaService:MediaService) {
+   console.log("first",userService)
+    this.userService = userService
+    this.tokenService=tokenService
+    this.mediaService=mediaService // Use the IOC container
   }
 
   async login(req: Request, res: Response): Promise<void> {
@@ -188,4 +192,3 @@ git  public userService:UserService
     );
   }
 }
-iocContainer.register(UserController,new UserController())

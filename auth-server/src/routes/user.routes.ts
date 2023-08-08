@@ -3,35 +3,36 @@ import {UserController} from "../controllers/user.controller";
 import { LoginDTO, ProfileDTO, RegisterDTO, UpdateRegisterDTO } from "../dtos/user.dto";
 import RequestValidator from "../middlewares/RequestValidator.middleware";
 import { catchAsync } from "../utils/catchAsync";
-import { iocContainer } from "../utils/IoCContainer.utils";
+import { container } from "tsyringe";
 const router = Router();
+const userIocContainer=container.resolve(UserController)
 router.post('/login',
 RequestValidator.validate(LoginDTO),
-catchAsync(iocContainer.resolve(UserController).login)
+catchAsync(userIocContainer.login.bind(userIocContainer))
 )
 
-router.post('/profile',RequestValidator.validate(ProfileDTO),catchAsync(iocContainer.resolve(UserController).createProfile))
+router.post('/profile',RequestValidator.validate(ProfileDTO),catchAsync(userIocContainer.createProfile.bind(userIocContainer)))
 
 
 router.get('/refresh',
-catchAsync(iocContainer.resolve(UserController).refresh)
+catchAsync(userIocContainer.refresh.bind(userIocContainer))
 )
 
 router.post(
   "/register",
   RequestValidator.validate(RegisterDTO),
-  catchAsync(iocContainer.resolve(UserController).register)
+  catchAsync(userIocContainer.register.bind(userIocContainer))
 );
 router.patch(
   "/",
   RequestValidator.validate(UpdateRegisterDTO),
-  catchAsync(iocContainer.resolve(UserController).update)
+  catchAsync(userIocContainer.update.bind(userIocContainer))
 );
-router.get("/", catchAsync(iocContainer.resolve(UserController).gets));
-router.get("/:userID", catchAsync(iocContainer.resolve(UserController).get));
+router.get("/", catchAsync(userIocContainer.gets.bind(userIocContainer)));
+router.get("/:userID", catchAsync(userIocContainer.get.bind(userIocContainer)));
 router.delete(
   "/:userID",
-  catchAsync(iocContainer.resolve(UserController).delete)
+  catchAsync(userIocContainer.delete.bind(userIocContainer))
 );
 
 export default router;

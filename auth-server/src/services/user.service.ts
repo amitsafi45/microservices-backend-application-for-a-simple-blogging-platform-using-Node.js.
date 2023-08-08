@@ -9,7 +9,8 @@ import {
 } from "../utils/responseMessage.utils";
 import BcryptService from "../utils/bcrypt.utils";
 import { Message } from "../constants/message";
-import { iocContainer } from "../utils/IoCContainer.utils";
+import { autoInjectable } from "tsyringe";
+@autoInjectable()
 export class UserService implements IUserService {
  
   async register(data: RegisterDTO): Promise<void> {
@@ -122,4 +123,3 @@ export class UserService implements IUserService {
   }
 
 }
-iocContainer.register(UserService,new UserService())

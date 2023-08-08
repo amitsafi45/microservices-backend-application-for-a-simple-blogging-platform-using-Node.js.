@@ -1,6 +1,9 @@
 import express from 'express'
+import 'reflect-metadata';
 import middleware from './middlewares';
 import EnvironmentConfiguration from './config/env.config';
+import {Provider} from './test'
+
 async function bootStrap() {
   const app = express();
 

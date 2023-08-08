@@ -4,10 +4,10 @@ import { Media } from '@prisma/client'
 import { MediaDTO } from '../dtos/media.dto'
 import HttpException from '../utils/HttpException'
 import { prisma } from '../config/database.config'
-import { iocContainer } from '../utils/IoCContainer.utils'
 import { TransferImage } from '../utils/transferImageFromTempTOUploadFolder.utils'
+import { autoInjectable } from 'tsyringe'
 
-
+@autoInjectable()
 export class MediaService {
   public TEMP_FOLDER_PATH:string
   constructor(){
@@ -34,4 +34,3 @@ export class MediaService {
 
  
 }
-iocContainer.register(MediaService,new MediaService())
