@@ -6,12 +6,12 @@ export default class RequestValidator {
   static async getValidationMessage(
     errors: ValidationError[],
     message: string[]
-  ) {
-    errors.forEach(async (err) => {
-      if (err.children && err.children?.length > 0) {
-        await this.getValidationMessage(err.children, message);
-      } else {
-        if (err.constraints) {
+    ) {
+      errors.forEach(async (err) => {
+        if (err.children && err.children?.length > 0) {
+          await this.getValidationMessage(err.children, message);
+        } else {
+          if (err.constraints) {
           Object.values(err.constraints).forEach((value) => {
             message.push(value);
           });
@@ -24,6 +24,7 @@ export default class RequestValidator {
     return async (req: Request, res: Response, next: NextFunction) => {
       // *Convert body to class instance
       const convertedObject = plainToClass(classInstance, req.body); // *Validate the class instance
+      console.log("dddddddd",req.body)
 
       let validationMessages: string[] = [];
       const errors = await validate(convertedObject, {

@@ -110,11 +110,11 @@ export class UserController implements IUserController {
   }
 
 
-  async register(req: Request, res: Response): Promise<void> {
+  async register(req: Request, res: Response) {
     console.log("first")
-    await this.userService.register(req.body);
-
-    res.send(
+    const d=await this.userService.register(req.body);
+console.log(d,"ffff")
+    return res.send(
       createResponse<string>(
         "success",
         StatusCodes.SUCCESS,
