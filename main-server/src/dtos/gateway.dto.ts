@@ -8,12 +8,15 @@ import { IsNotEmpty, IsNumber, IsString } from "class-validator";
     @IsString()
     host:string
 
+
+    @IsNotEmpty()
+    @IsString()
+    serviceName:string
+
     @IsNotEmpty()
     @IsNumber()
     port:number
 
-    @IsNotEmpty()
-    @IsString()
-    url:string
+   
 
 }

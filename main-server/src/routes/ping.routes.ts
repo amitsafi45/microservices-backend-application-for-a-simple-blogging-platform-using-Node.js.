@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { catchAsync } from "../utils/catchAsync";
-import { iocContainer } from "../utils/IoCContainer.utils";
 import { PingController } from "../controllers/ping.controller";
+import { container } from "tsyringe";
 const router=Router()
-router.get('/',iocContainer.resolve(PingController).ping)
+const iocContainer=container.resolve(PingController)
+router.get('/',catchAsync(iocContainer.ping.bind(iocContainer)))
 export default router

@@ -1,6 +1,7 @@
 import { ApiDetail } from "../dtos/gateway.dto";
-import { iocContainer } from "../utils/IoCContainer.utils";
 import { prisma } from "../config/database.config";
+import { autoInjectable } from "tsyringe";
+@autoInjectable()
 export class GatewayService{
    async create(data:ApiDetail){
      await prisma.serviceRegistry.create({data:{
@@ -8,15 +9,18 @@ export class GatewayService{
    }
 
    async gets(){
-    return await prisma.serviceRegistry.findMany({
+    console.log("service")
+    const t= await prisma.serviceRegistry.findMany({
 select:{
     id:true,
     clientName:true,
+    serviceName:true,
     host:true,
     port:true,
-    url:true
 }
     })
-   }
+    console.log(t,"service")
+return t   
 }
-iocContainer.register(GatewayService,new GatewayService())
+   
+}
