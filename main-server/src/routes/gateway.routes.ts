@@ -1,22 +1,23 @@
 import { Request, Response, Router, response } from "express";
-import { GatewayService } from "../services/gateway.service";
+import {  ServiceRegistryService } from "../services/serviceRegistry.service";
 import axios from "axios";
 import { container } from "tsyringe";
 import HttpException from "../utils/HttpException";
 import { Status } from "../constants/enum";
 const router = Router();
 const client = async () => {
-  return await container.resolve(GatewayService).gets();
-  
+  return await container.resolve(ServiceRegistryService).gets();
 };
 router.all("/:serviceName/:target", async (req: Request, res: Response) => {
   const clientDetail = await client();
   clientDetail.map((endPoint) => {
     let response;
     if (endPoint.serviceName === req.params.serviceName) {
-        if(endPoint.status===Status.DIE){
-          throw HttpException.badRequest(" Requested Service are available for some time Please try later")
-        }
+      if (endPoint.status === Status.DIE) {
+        throw HttpException.badRequest(
+          " Requested Service are available for some time Please try later"
+        );
+      }
       let url;
       if (req.query.action) {
         url = `http://${endPoint.host}:${endPoint.port}/api/${endPoint.serviceName}/${req.params.target}/${req.query.action}`;

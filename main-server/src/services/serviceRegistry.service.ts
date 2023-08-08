@@ -3,7 +3,7 @@ import { prisma } from "../config/database.config";
 import { autoInjectable } from "tsyringe";
 import HttpException from "../utils/HttpException";
 @autoInjectable()
-export class GatewayService{
+export class ServiceRegistryService{
    async create(data:ApiDetail){
      await prisma.serviceRegistry.create({data:{
         ...data    }})
