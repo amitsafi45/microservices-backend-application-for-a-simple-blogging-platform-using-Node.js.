@@ -3,7 +3,6 @@ import { UploadedFile } from 'express-fileupload'
 import HttpException from './HttpException'
 import path from 'path'
 import fs from 'fs'
-import { iocContainer } from './IoCContainer.utils'
 
 export class UploadHelper{
   public PUBLIC_FOLDER_PATH:string
@@ -61,4 +60,3 @@ constructor(){
   }
   
 }
-iocContainer.register(UploadHelper,new UploadHelper())
