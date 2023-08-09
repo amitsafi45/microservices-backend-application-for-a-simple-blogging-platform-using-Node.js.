@@ -66,7 +66,7 @@ export class UserController implements IUserController {
 
 
   async refresh(req: Request, res: Response):Promise<void>{
-    console.log(req.cookies['refresh'],'gggg');
+    console.log(req.cookies,'gggg');
     const cookie=req.cookies?.refresh
     if(!cookie.refresh){
       console.log("first");
