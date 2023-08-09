@@ -6,6 +6,8 @@ import { catchAsync } from "../utils/catchAsync";
 import { container } from "tsyringe";
 const router = Router();
 const userIocContainer=container.resolve(UserController)
+router.post('/check',(req,res)=>{console.log(req.method,req.body) 
+  return res.send("hello sir")})
 router.post('/login',
 RequestValidator.validate(LoginDTO),
 catchAsync(userIocContainer.login.bind(userIocContainer))
