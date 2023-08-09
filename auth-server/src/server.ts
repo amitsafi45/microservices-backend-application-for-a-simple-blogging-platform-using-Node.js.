@@ -19,6 +19,20 @@ async function bootStrap() {
       console.info(
         `Auth Server started at http://localhost:${EnvironmentConfiguration.PORT}`
       );
+
+      const register=()=>console.log("first heelll")
+
+      const pingMainServer= ()=>{
+       axios.get('http://localhost:4000/metro/api/ping').then((response)=>{
+            console.log("response",response.data)
+              
+       }).catch((error)=>{
+        // console.log("dddd")
+          console.log(error.message)
+       })
+    }
+
+    setInterval(pingMainServer,5000)
 //      myEmitter.on('ping main server', async() => {
 //       try{
 //         const registerService= await axios.get('http://localhost:4000/service-registry/api/ping')    
