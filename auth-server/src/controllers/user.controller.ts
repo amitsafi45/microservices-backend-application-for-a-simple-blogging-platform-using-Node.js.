@@ -66,28 +66,25 @@ export class UserController implements IUserController {
 
 
   async refresh(req: Request, res: Response):Promise<void>{
-    console.log(req.cookies,'gggg');
-    const cookie=req.cookies?.refresh
+    const cookie=JSON.parse(JSON.stringify(req.cookies))
     if(!cookie.refresh){
-      console.log("first");
       throw HttpException.forbidden(Message.unAuthorized)
     }
-    console.log("pass");
-    const refreshTokens=cookie  
-    console.log(refreshTokens,"llll");
-   const checking=webToken.verify(refreshTokens,EnvironmentConfiguration.REFRESH_TOKEN_SECRET)
+    const refreshTokens=cookie.refresh  
+   const checking=webToken.verify(refreshTokens.toString(),EnvironmentConfiguration.REFRESH_TOKEN_SECRET)
     if(!checking){
       throw HttpException.forbidden("Forbidden")
     }
-    const decodedValue=JSON.parse(atob(refreshTokens))
-    const {id,email,username,...rest}=await this.userService.get(decodedValue.id)
+    const {id,email,username,...rest}=await this.userService.get(checking.id)
+    console.log(id,"iididididid")
     const { accessToken, refreshToken } = webToken.generateTokens(
       {id,email},
       email
     );
+
     const ONE_DAY_AFTER = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
 
-    await  this.tokenService.create(refreshToken, ONE_DAY_AFTER, id);
+    await  this.tokenService.refreshTokenRotation(refreshToken, ONE_DAY_AFTER, id);
     res.cookie('refresh',refreshToken,{
       httpOnly:true, //accessible only by web server
       secure:true,//https
@@ -114,7 +111,6 @@ export class UserController implements IUserController {
   async register(req: Request, res: Response) {
     console.log("first")
     const d=await this.userService.register(req.body);
-console.log(d,"ffff")
     return res.send(
       createResponse<string>(
         "success",

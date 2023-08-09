@@ -36,7 +36,22 @@ export class TokenService {
    if(!findToken){
     throw HttpException.badRequest(Message.unAuthorized)
    }
-   findToken.status="USED"
    return findToken
   }
+  async refreshTokenRotation(currentRefreshToken:string,expiredAt:Date,id:string){
+    const findToken=await prisma.token.update({
+    where:{
+    userID:id,
+     status:"UN_USED"
+    },
+    include:{
+      user:true
+    },
+    data:{token:currentRefreshToken,expiresAt:expiredAt}
+    })
+    if(!findToken){
+     throw HttpException.badRequest(Message.unAuthorized)
+    }
+    return true
+   }
 }

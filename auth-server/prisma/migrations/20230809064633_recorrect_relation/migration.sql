@@ -10,6 +10,7 @@ CREATE TABLE "user" (
     "username" VARCHAR(20) NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "profileStatus" BOOLEAN NOT NULL,
     "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
     "deleted_at" TIMESTAMP(3),
@@ -37,7 +38,6 @@ CREATE TABLE "profile" (
     "bio" TEXT,
     "social_media_link" TEXT[],
     "address" TEXT,
-    "madia_id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
@@ -51,6 +51,7 @@ CREATE TABLE "media" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "type" "MediaType" NOT NULL,
+    "profile_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
     "deleted_at" TIMESTAMP(3),
@@ -62,16 +63,19 @@ CREATE TABLE "media" (
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "profile_madia_id_key" ON "profile"("madia_id");
+CREATE UNIQUE INDEX "token_user_id_key" ON "token"("user_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "profile_user_id_key" ON "profile"("user_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "media_profile_id_key" ON "media"("profile_id");
 
 -- AddForeignKey
 ALTER TABLE "token" ADD CONSTRAINT "token_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "profile" ADD CONSTRAINT "profile_madia_id_fkey" FOREIGN KEY ("madia_id") REFERENCES "media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "profile" ADD CONSTRAINT "profile_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "profile" ADD CONSTRAINT "profile_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "media" ADD CONSTRAINT "media_profile_id_fkey" FOREIGN KEY ("profile_id") REFERENCES "profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
