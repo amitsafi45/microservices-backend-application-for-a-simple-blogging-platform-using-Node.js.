@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import express from 'express'
 import middleware from './middlewares';
 import EnvironmentConfiguration from './config/env.config';

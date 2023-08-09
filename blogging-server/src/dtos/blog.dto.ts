@@ -11,9 +11,7 @@ export class PostDTO{
     @IsString()
     content:string
 
-    @IsNotEmpty()
-    @IsUUID()
-    authorID:string
+  
 
     @IsNotEmpty()
     @IsArray()
@@ -37,4 +35,36 @@ export class CommentDTO{
     @IsNotEmpty()
     @IsString()
     content:string
+}
+
+
+export class UpdatePostDTO extends PostDTO{
+    @IsNotEmpty()
+    @IsUUID()
+    postID:string
+
+
+
+}
+
+export class UpdateCommentDTO extends CommentDTO{
+    @IsNotEmpty()
+    @IsUUID()
+    commentID:string
+    
+
+}
+
+export class PostLike{
+    @IsNotEmpty()
+    @IsUUID()
+    postID:string
+    
+
+}
+export class CommentLike{
+    @IsNotEmpty()
+    @IsUUID()
+    commentID:string
+    
 }

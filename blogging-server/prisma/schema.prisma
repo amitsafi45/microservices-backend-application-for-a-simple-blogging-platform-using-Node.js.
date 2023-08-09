@@ -12,6 +12,7 @@ model Post {
   title       String
   content     String
   authorID    String
+  tags     String[]
   commentator Comment[]
   PostLikes   PostLike[]
   media       Media[]
