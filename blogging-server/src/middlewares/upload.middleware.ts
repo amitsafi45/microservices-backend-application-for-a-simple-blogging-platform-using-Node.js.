@@ -5,15 +5,15 @@ import { MediaType } from '../constants/enum'
 // import UploadHelper from '../utils/upload.utils'
 import { randomBytes } from 'crypto'
 import { UploadHelper } from '../utils/upload.utils'
-import { iocContainer } from '../utils/IoCContainer.utils'
+import { autoInjectable } from 'tsyringe'
 
 
-
+@autoInjectable()
   export class Upload{
     public uploadHelper:UploadHelper
     public mediaTypes:any
-    constructor(){
-      this.uploadHelper=iocContainer.resolve(UploadHelper)
+    constructor(uploadHelper:UploadHelper){
+      this.uploadHelper=uploadHelper
       this.mediaTypes=Object.values(MediaType)
     }
   single(fieldName: string){
@@ -21,7 +21,6 @@ import { iocContainer } from '../utils/IoCContainer.utils'
       if (!req.files) {
        return next( HttpException.badRequest('No file uploaded'))
       }
-      console.log("first")
       if (Object.keys(req.files).length !== 1) {
        return next( HttpException.badRequest('Only one file can be uploaded'))
       }
@@ -47,4 +46,3 @@ import { iocContainer } from '../utils/IoCContainer.utils'
  
 } 
 
-iocContainer.register(Upload,new Upload())
