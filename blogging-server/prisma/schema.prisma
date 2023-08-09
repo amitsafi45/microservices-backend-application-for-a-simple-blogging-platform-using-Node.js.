@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -6,4 +5,62 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Post {
+  id          String     @id @default(uuid())
+  title       String
+  content     String
+  authorID    String
+  commentator Comment[]
+  PostLikes   PostLike[]
+  media       Media[]
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime?  @map("updated_at")
+  deletedAt   DateTime?  @map("deleted_at")
+
+  @@map("post")
+}
+
+model Media {
+  id        String    @id @default(uuid())
+  name      String
+  post      Post      @relation(fields: [postID], references: [id])
+  postID    String    @map("post_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@map("media")
+}
+
+model Comment {
+  id            String        @id @default(uuid())
+  post          Post          @relation(fields: [commentatorID], references: [id])
+  commentLikes  CommentLike[]
+  commentatorID String        @map("post_id")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime?     @map("updated_at")
+  deletedAt     DateTime?     @map("deleted_at")
+}
+
+model PostLike {
+  id     String @id @default(uuid())
+  post   Post   @relation(fields: [postID], references: [id])
+  postID String @map("post_id")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@map("post_like")
+}
+
+model CommentLike {
+  id        String    @id @default(uuid())
+  comment   Comment?  @relation(fields: [commentID], references: [id])
+  commentID String?   @map("comment_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 }
