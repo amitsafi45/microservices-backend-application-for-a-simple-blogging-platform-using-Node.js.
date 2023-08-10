@@ -25,6 +25,7 @@ export class PostService{
            content:data.content,
            authorID:authorID,
            tags:data.tags,
+           updatedAt:new Date(Date.now())
          
             }
           })

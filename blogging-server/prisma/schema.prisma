@@ -37,9 +37,11 @@ model Media {
 
 model Comment {
   id            String        @id @default(uuid())
-  post          Post          @relation(fields: [commentatorID], references: [id])
+  post          Post          @relation(fields: [postID], references: [id])
+  postID        String         @map("post_id")
   commentLikes  CommentLike[]
-  commentatorID String        @map("post_id")
+  content      String
+  commentatorID String        @map("commentator_id")
   createdAt     DateTime      @default(now()) @map("created_at")
   updatedAt     DateTime?     @map("updated_at")
   deletedAt     DateTime?     @map("deleted_at")
