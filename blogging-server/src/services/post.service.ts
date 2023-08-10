@@ -40,8 +40,8 @@ export class PostService{
             id:id
         },include:{
             media:true,
-            commentator:true,
-            PostLikes:true
+            comment:true,
+            postLikes:true
         }
        })
        if(!post){
@@ -54,11 +54,12 @@ export class PostService{
           return await prisma.post.findMany({
             include:{
                 media:true,
-                commentator:true,
-                PostLikes:true
+                comment:true,
+                postLikes:true,
             }
           })
       }
+
       async delete(id:string){
       await prisma.post.delete({where:{id:id}})
       }

@@ -13,8 +13,8 @@ model Post {
   content     String
   authorID    String
   tags     String[]
-  commentator Comment[]
-  PostLikes   PostLike[]
+  comment Comment[]
+  postLikes   PostLike[]
   media       Media[]
   createdAt   DateTime   @default(now()) @map("created_at")
   updatedAt   DateTime?  @map("updated_at")
