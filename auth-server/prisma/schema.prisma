@@ -16,10 +16,10 @@ model User {
   username      String    @db.VarChar(20)
   email         String    @unique
   password      String
-  token         Token?
+  token         Token[]
   profile       Profile?
   profileStatus Boolean
-  createdAt     DateTime? @default(now()) @map("created_at")
+  createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime? @map("updated_at")
   deletedAt     DateTime? @map("deleted_at")
 
@@ -29,11 +29,11 @@ model User {
 model Token {
   id        String      @id @default(uuid())
   token     String
-  expiresAt DateTime?   @db.Timestamptz(3)
+  expiresAt DateTime   @db.Timestamptz(3)
   status    TokenStatus
   user      User        @relation(fields: [userID], references: [id])
-  userID    String      @unique @map("user_id")
-  createdAt DateTime?   @default(now()) @map("created_at")
+  userID    String      @map("user_id")
+  createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime?   @map("updated_at")
   deletedAt DateTime?   @map("deleted_at")
 
@@ -48,7 +48,7 @@ model Profile {
   media           Media?
   user            User      @relation(fields: [userID], references: [id])
   userID          String    @unique @map("user_id")
-  createdAt       DateTime? @default(now()) @map("created_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime? @map("updated_at")
   deletedAt       DateTime? @map("deleted_at")
 
