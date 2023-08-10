@@ -28,7 +28,7 @@ model User {
 
 model Token {
   id        String      @id @default(uuid())
-  token     String
+  token     String       @unique()
   expiresAt DateTime   @db.Timestamptz(3)
   status    TokenStatus
   user      User        @relation(fields: [userID], references: [id])

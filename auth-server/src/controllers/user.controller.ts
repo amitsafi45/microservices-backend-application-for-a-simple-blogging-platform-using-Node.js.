@@ -79,12 +79,12 @@ export class UserController implements IUserController {
       {id,email},
       email
     );
-
+   
+   await this.tokenService.blockRefreshToken(refreshTokens)
     const ONE_DAY_AFTER = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
 
     await this.tokenService.create(refreshToken, ONE_DAY_AFTER, id);
 
-    // await  this.tokenService.refreshTokenRotation(refreshToken, ONE_DAY_AFTER, id);
     res.cookie('refresh',refreshToken,{
       httpOnly:true, //accessible only by web server
       secure:true,//https
@@ -109,7 +109,6 @@ export class UserController implements IUserController {
 
 
   async register(req: Request, res: Response) {
-    console.log("first")
     const d=await this.userService.register(req.body);
     return res.send(
       createResponse<string>(

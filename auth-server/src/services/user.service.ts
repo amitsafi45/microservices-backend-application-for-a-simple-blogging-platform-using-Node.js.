@@ -11,7 +11,7 @@ import BcryptService from "../utils/bcrypt.utils";
 import { Message } from "../constants/message";
 import { autoInjectable } from "tsyringe";
 @autoInjectable()
-export class UserService implements IUserService {
+export class UserService  {
  
   async register(data: RegisterDTO): Promise<void> {
     await prisma.user.create({
@@ -43,7 +43,7 @@ export class UserService implements IUserService {
     });
     return data;
   }
-  async get(id: string): Promise<IUser> {
+  async get(id: string) {
     const user = await prisma.user.findFirst({
       where: {
         id: id,
@@ -52,7 +52,7 @@ export class UserService implements IUserService {
         email: true,
         username: true,
         id: true,
-        profileStatus:true
+        profileStatus:true,
       },
     });
     if (!user) {

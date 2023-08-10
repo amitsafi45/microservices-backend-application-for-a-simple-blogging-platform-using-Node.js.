@@ -3,7 +3,7 @@
 // import { Admin } from "../../entities/admin/admin.entity";
 // import { TokenStatus } from "../../constants/enum";
 // import User from '../../entities/user/user.entity'
-import { Token, User } from "@prisma/client";
+import { Token, TokenStatus, User } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../config/database.config";
 import HttpException from "../utils/HttpException";
@@ -22,15 +22,15 @@ export class TokenService {
     });
   }
 
-  async refreshToken(id:string,refreshToken:string){
-   const findToken=await prisma.token.findFirst({
+  async blockRefreshToken(refreshToken:string){
+   const findToken=await prisma.token.update({
    where:{
-    userID:id,
-    token:refreshToken,
-    status:"UN_USED"
+     token:refreshToken
+   
    },
-   include:{
-     user:true
+   data:{
+      status:TokenStatus.USED,
+      updatedAt:new Date(Date.now())
    }
    })
    if(!findToken){
@@ -38,20 +38,5 @@ export class TokenService {
    }
    return findToken
   }
-  async refreshTokenRotation(currentRefreshToken:string,expiredAt:Date,id:string){
-    const findToken=await prisma.token.update({
-    where:{
-    userID:id,
-     status:"UN_USED"
-    },
-    include:{
-      user:true
-    },
-    data:{token:currentRefreshToken,expiresAt:expiredAt}
-    })
-    if(!findToken){
-     throw HttpException.badRequest(Message.unAuthorized)
-    }
-    return true
-   }
+  
 }
