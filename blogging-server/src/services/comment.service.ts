@@ -49,8 +49,8 @@ export class CommentService{
       return comment
   }
   
-  async delete(id:string){
-     await prisma.comment.delete({where:{id:id}})
+  async delete(id:string,commentatorID:string){
+     await prisma.comment.delete({where:{id:id,commentatorID:commentatorID}})
   }
   
 } 

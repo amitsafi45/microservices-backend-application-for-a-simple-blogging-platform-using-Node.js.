@@ -1,27 +1,31 @@
 import { autoInjectable } from "tsyringe";
-import { CommentDTO, CommentLikeDTO, PostLikeDTO } from "../dtos/blog.dto";
+import { CommentDTO,  } from "../dtos/blog.dto";
 import { prisma } from "../config/database.config";
 import HttpException from "../utils/HttpException";
 
 @autoInjectable()
 export class LikesService{
-    async postLike(data:PostLikeDTO){
-       await prisma.postLike.create({data:{postID:data.postID}})
+    async postLike(postID:string){
+       await prisma.postLike.create({data:{postID:postID}})
     }
-    async postUnLike(data:PostLikeDTO){
-        const existingLike=await prisma.postLike.findFirst({where:{postID:data.postID}})
+
+
+    async postUnLike(postID:string){
+        const existingLike=await prisma.postLike.findFirst({where:{postID:postID}})
          if(!existingLike){
             throw HttpException.notFound("Post not Like")
          }
         await prisma.postLike.delete({where:{id:existingLike.id}})
     }
 
-    async commentLike(data:CommentLikeDTO){
-        await prisma.commentLike.create({data:{commentID:data.commentID}})
+
+    async commentLike(commentID:string){
+        await prisma.commentLike.create({data:{commentID:commentID}})
 
     }
-    async commentUnlike(data:CommentLikeDTO){
-        const existingLike=await prisma.commentLike.findFirst({where:{commentID:data.commentID}})
+
+    async commentUnLike(commentID:string){
+        const existingLike=await prisma.commentLike.findFirst({where:{commentID:commentID}})
         if(!existingLike){
            throw HttpException.notFound("Comment not Like")
         }
