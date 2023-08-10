@@ -6,4 +6,5 @@ import { container } from "tsyringe";
 const router=Router()
 const iocContainer=container.resolve(PingController)
 router.get('/',iocContainer.ping.bind(iocContainer))
+router.get('/verification',catchAsync(Authentication.Check()),iocContainer.verification)
 export default router
