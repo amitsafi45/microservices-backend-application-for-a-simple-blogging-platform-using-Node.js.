@@ -4,6 +4,7 @@ import { LoginDTO, ProfileDTO, RegisterDTO, UpdateRegisterDTO } from "../dtos/us
 import RequestValidator from "../middlewares/RequestValidator.middleware";
 import { catchAsync } from "../utils/catchAsync";
 import { container } from "tsyringe";
+import Authentication from "../middlewares/Authentication.middleware";
 const router = Router();
 const userIocContainer=container.resolve(UserController)
 router.post('/check',(req,res)=>{console.log(req.method,req.body) 
@@ -19,7 +20,7 @@ router.post('/profile',RequestValidator.validate(ProfileDTO),catchAsync(userIocC
 router.get('/refresh',
 catchAsync(userIocContainer.refresh.bind(userIocContainer))
 )
-router.get('/logout',catchAsync(userIocContainer.logout.bind(userIocContainer)))
+router.get('/logout',Authentication.Check(),catchAsync(userIocContainer.logout.bind(userIocContainer)))
 router.post(
   "/register",
   RequestValidator.validate(RegisterDTO),
@@ -33,8 +34,8 @@ router.patch(
 router.get("/", catchAsync(userIocContainer.gets.bind(userIocContainer)));
 router.get("/:userID", catchAsync(userIocContainer.get.bind(userIocContainer)));
 router.delete(
-  "/:userID",
-  catchAsync(userIocContainer.delete.bind(userIocContainer))
+  "/deactivate",Authentication.Check(),
+  catchAsync(userIocContainer.deactivate.bind(userIocContainer))
 );
 
 export default router;

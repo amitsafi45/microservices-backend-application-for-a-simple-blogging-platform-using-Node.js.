@@ -19,6 +19,7 @@ import { TokenService } from "../services/token.service";
 import { ProfileDTO } from "../dtos/user.dto";
 import { MediaService } from "../services/media.service";
 import { autoInjectable } from "tsyringe";
+import { User } from "@prisma/client";
 
 @autoInjectable()
 export class UserController implements IUserController {
@@ -166,14 +167,15 @@ export class UserController implements IUserController {
       )
     );
   }
-  async delete(req: Request, res: Response): Promise<void> {
-    await this.userService.delete(req.params.userID);
+  async deactivate(req: Request, res: Response): Promise<void> {
+    const user=req.user as User
+    await this.userService.delete(user.id);
 
     res.send(
       createResponse<string>(
         "success",
         StatusCodes.SUCCESS,
-        deletedMessage("User")
+        "Your Account Deactivated"
       )
     );
   }

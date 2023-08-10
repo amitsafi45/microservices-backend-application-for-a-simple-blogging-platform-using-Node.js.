@@ -60,15 +60,11 @@ export class UserService  {
     }
     return user;
   }
-  async delete(id: string): Promise<string> {
-    const user = await prisma.user.update({
-      where: { id: id },
-      data: {
-        deletedAt: new Date(),
-      },
+  async delete(id: string) {
+     await prisma.user.delete({
+      where: { id: id }
     });
 
-    return deletedMessage("User");
   }
   async update(data: UpdateRegisterDTO): Promise<void> {
     const user = await prisma.user.update({
