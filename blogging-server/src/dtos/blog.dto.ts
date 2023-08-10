@@ -55,14 +55,14 @@ export class UpdateCommentDTO extends CommentDTO{
 
 }
 
-export class PostLike{
+export class PostLikeDTO{
     @IsNotEmpty()
     @IsUUID()
     postID:string
     
 
 }
-export class CommentLike{
+export class CommentLikeDTO{
     @IsNotEmpty()
     @IsUUID()
     commentID:string
