@@ -32,6 +32,29 @@ export class UserController implements IUserController {
     this.mediaService=mediaService // Use the IOC container
   }
 
+  async logout(req: Request, res: Response){
+    const cookie=JSON.parse(JSON.stringify(req.cookies))
+    if(!cookie.refresh){
+      throw HttpException.noContent("Token not found")
+    }
+    res.clearCookie('refresh',{
+      httpOnly:true, //accessible only by web server
+      secure:true,//https
+      sameSite:'none', //cross-site cookie
+    
+
+    })
+    res.send(
+      createResponse<object>(
+        "success",
+        StatusCodes.SUCCESS,
+        Message.logout,
+       
+      )
+    );
+
+  }
+
   async login(req: Request, res: Response): Promise<void> {
     const verifyUser = await this.userService.userVerify(req.body);
     
@@ -95,7 +118,7 @@ export class UserController implements IUserController {
     res.send(
       createResponse<object>(
         "success",
-        StatusCodes.ACCEPTED,
+        StatusCodes.CREATED,
         Message.userRefresh,
         {
           token: accessToken,
@@ -113,7 +136,7 @@ export class UserController implements IUserController {
     return res.send(
       createResponse<string>(
         "success",
-        StatusCodes.SUCCESS,
+        StatusCodes.CREATED,
         CreatedMessage("User")
       )
     );
@@ -160,7 +183,7 @@ export class UserController implements IUserController {
     res.send(
       createResponse<string>(
         "success",
-        StatusCodes.SUCCESS,
+        StatusCodes.CREATED,
         UpdatedMessage("User")
       )
     );
@@ -182,7 +205,7 @@ export class UserController implements IUserController {
      res.send(
       createResponse<string>(
         "success",
-        StatusCodes.SUCCESS,
+        StatusCodes.CREATED,
         CreatedMessage("Profile")
       )
     );

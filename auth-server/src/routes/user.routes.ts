@@ -19,7 +19,7 @@ router.post('/profile',RequestValidator.validate(ProfileDTO),catchAsync(userIocC
 router.get('/refresh',
 catchAsync(userIocContainer.refresh.bind(userIocContainer))
 )
-
+router.get('/logout',catchAsync(userIocContainer.logout.bind(userIocContainer)))
 router.post(
   "/register",
   RequestValidator.validate(RegisterDTO),

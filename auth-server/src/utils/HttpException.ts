@@ -31,6 +31,9 @@ class HttpException extends Error {
   static internalServerError(message: string) {
     return new HttpException(message, StatusCodes.INTERNAL_SERVER_ERROR)
   }
+  static noContent(message: string) {
+    return new HttpException(message, StatusCodes.NO_CONTENT)
+  }
 }
 
 export default HttpException

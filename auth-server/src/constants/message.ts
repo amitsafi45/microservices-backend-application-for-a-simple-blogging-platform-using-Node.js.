@@ -8,6 +8,7 @@ export const Message = {
     emailOrPhoneAlreadyInUse: "Email or phone already in use",
     loginSuccessfully: "Login successfully",
     userRefresh:"user refresh Successfully",
+    logout:"Logout successfully",
     invalidOTP: "Invalid OTP",
     OTPExpired: "OTP has expired",
     accountVerified: "Account verified successfully",
