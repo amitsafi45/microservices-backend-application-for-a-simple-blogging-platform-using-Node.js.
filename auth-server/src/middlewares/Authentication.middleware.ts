@@ -5,6 +5,7 @@ import webTokenUtils from "../utils/webToken.utils";
 import EnvironmentConfiguration from "../config/env.config";
 import { Mode } from "../constants/enum";
 import { prisma } from "../config/database.config";
+import { getNotFoundMessage } from "../utils/responseMessage.utils";
 
 export default class Authentication {
   static Check = () => {
@@ -14,13 +15,13 @@ export default class Authentication {
       console.log(authorization,'lllll');
       if (!authorization) {
         
-        return next(HttpException.badRequest(Message.unAuthorized));
+        return next(HttpException.noContent("Token not found"));
       }
 
       const data = authorization.trim().split(" ");
 
       if (data.length !== 2) {
-       return  next( HttpException.badRequest(Message.unAuthorized));
+       return  next( HttpException.badRequest("Invalid Token"));
       }
 
       const mode = data[0];
@@ -33,7 +34,7 @@ export default class Authentication {
             EnvironmentConfiguration.ACCESS_TOKEN_SECRET
           );
         } else {
-        return  next( HttpException.badRequest(Message.unAuthorized));
+        return  next( HttpException.unauthorized(Message.unAuthorized));
         }
 
         const { id, email } = data;
@@ -45,7 +46,7 @@ export default class Authentication {
           },
         });
         if (!user) {
-          throw HttpException.badRequest(Message.unAuthorized);
+          throw HttpException.notFound(getNotFoundMessage("User"));
         }
         const { password, ...rest } = user;
         req.user = rest;
@@ -53,7 +54,7 @@ export default class Authentication {
       } catch (err: any) {
         console.error(err.toString());
         
-       return  next(HttpException.badRequest(Message.unAuthorized));
+       return  next(HttpException.unauthorized(Message.unAuthorized));
       }
     };
   };
