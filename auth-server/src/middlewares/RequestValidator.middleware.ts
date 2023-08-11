@@ -24,7 +24,6 @@ export default class RequestValidator {
     return async (req: Request, res: Response, next: NextFunction) => {
       // *Convert body to class instance
       const convertedObject = plainToClass(classInstance, req.body); // *Validate the class instance
-      console.log("dddddddd",req.body)
 
       let validationMessages: string[] = [];
       const errors = await validate(convertedObject, {
