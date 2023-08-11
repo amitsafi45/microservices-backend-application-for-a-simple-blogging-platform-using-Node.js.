@@ -5,10 +5,10 @@ import { autoInjectable } from "tsyringe";
 @autoInjectable()
 export class PingController {
   ping(req: Request, res: Response):void {
-    const response = createResponse<string>(  "success",
+    const response = createResponse<string>(  true,
     StatusCodes.SUCCESS,
     "Pong");
     
-    res.send(response);
+    res.status(StatusCodes.SUCCESS).send(response);
   }
 }
