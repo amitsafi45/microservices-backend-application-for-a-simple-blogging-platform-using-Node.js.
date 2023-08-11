@@ -1,8 +1,4 @@
-// import { Token } from "../../entities/token/token.entity";
-// import { AppDataSource } from "../../configs/database.config";
-// import { Admin } from "../../entities/admin/admin.entity";
-// import { TokenStatus } from "../../constants/enum";
-// import User from '../../entities/user/user.entity'
+
 import { Token, TokenStatus, User } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../config/database.config";

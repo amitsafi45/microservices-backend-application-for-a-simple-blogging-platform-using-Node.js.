@@ -13,14 +13,18 @@ const errorHandler = (error: any, req: Request, res: Response, next: NextFunctio
 
   let data = {
     success: false,
+    code:500,
     message: Message.server,
     data: [],
     ...(EnvironmentConfiguration.NODE_ENV === Environment.DEVELOPMENT && { originalError: error.message }),
   }
   if (error.isCustom) {
     statusCode = error.statusCode
+    
     data = {
+      
       ...data,
+      code:error.statusCode,
       message: error.message,
     }
   }

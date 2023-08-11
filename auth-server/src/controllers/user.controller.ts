@@ -196,26 +196,36 @@ export class UserController implements IUserController {
   }
   async createProfile(req: Request, res: Response){
      const data=req.body as ProfileDTO
-     if(isUUID(req.user.id)){
+     if(!isUUID(req.user.id)){
       throw HttpException.badRequest("Invalid User")
      }
      const user=await this.userService.get(data.userID)
      if(user.profileStatus===true){
       throw HttpException.badRequest("You have already created profile")
      }
-     const profile=await this.userService.createProfile(data)
+     let media
+     let profile
      try{
-       await this.mediaService.uploadFile(data.media,profile.id)
+        profile=await this.userService.createProfile(data)
+        media=await this.mediaService.uploadFile(data.media,profile.id)
+        res.status(StatusCodes.SUCCESS).send(
+          createResponse<object>(
+            true,
+            StatusCodes.CREATED,
+            CreatedMessage("Profile")
+          )
+        );
      }catch(e:any){
-      console.log(e.message)
-       await this.userService.deleProfile(profile.id)
+      if(media){
+        await this.mediaService.delete(media.id)
+
+      }
+      if(profile){
+
+        await this.userService.deleProfile(profile.id)
+      }
+       throw HttpException.conflict("Profile not created")
      }
-     res.status(StatusCodes.SUCCESS).send(
-      createResponse<string>(
-        true,
-        StatusCodes.CREATED,
-        CreatedMessage("Profile")
-      )
-    );
+   
   }
 }

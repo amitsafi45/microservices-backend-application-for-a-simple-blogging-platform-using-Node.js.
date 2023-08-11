@@ -12,10 +12,11 @@ export class MediaService {
   public TEMP_FOLDER_PATH:string
   constructor(){
     
-    this.TEMP_FOLDER_PATH = path.join(__dirname, '..', '..', '..', 'public', 'temp')
+    this.TEMP_FOLDER_PATH = path.join(__dirname, '..', '..', 'public', 'temp')
   }
   async uploadFile(data: MediaDTO, id: string) {
     if (!existsSync(path.join(this.TEMP_FOLDER_PATH, data.type, data.name))) {
+      console.log(path.join(this.TEMP_FOLDER_PATH, data.type, data.name),"popoppo")
       throw HttpException.badRequest('Sorry file does not exists')
     }
     let newMedia = await prisma.media.create({data:{
@@ -24,13 +25,18 @@ export class MediaService {
       profileID:id
 
     }})
+    console.log(newMedia,"llll[p[[[[[[")
     const instance=TransferImage.getInstance()
     instance.setInfo(newMedia.id,newMedia.type,newMedia.name)
     instance.tempTOUploadFolder()
     return newMedia
   }
 
-
+async delete(id:string){
+    await  prisma.media.delete({where:{
+      id:id
+    }})
+}
 
  
 }
