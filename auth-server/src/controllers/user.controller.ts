@@ -20,6 +20,7 @@ import { ProfileDTO } from "../dtos/user.dto";
 import { MediaService } from "../services/media.service";
 import { autoInjectable } from "tsyringe";
 import { User } from "@prisma/client";
+import { isUUID } from "class-validator";
 
 @autoInjectable()
 export class UserController implements IUserController {
@@ -45,9 +46,9 @@ export class UserController implements IUserController {
     
 
     })
-    res.send(
+    res.status(StatusCodes.SUCCESS).send(
       createResponse<object>(
-        "success",
+        true,
         StatusCodes.SUCCESS,
         Message.logout,
        
@@ -73,9 +74,9 @@ export class UserController implements IUserController {
       maxAge: 7 * 24 * 60 * 60 * 1000 //cookie expiry:set to match refresh token expire time
 
     })
-    res.send(
+    res.status(StatusCodes.ACCEPTED).send(
       createResponse<object>(
-        "success",
+        true,
         StatusCodes.ACCEPTED,
         Message.loginSuccessfully,
         {
@@ -116,9 +117,9 @@ export class UserController implements IUserController {
       maxAge:7*24*60*60*1000 //cookie expiry:set to match refresh token expire time
 
     })
-    res.send(
+    res.status(StatusCodes.CREATED).send(
       createResponse<object>(
-        "success",
+        true,
         StatusCodes.CREATED,
         Message.userRefresh,
         {
@@ -134,20 +135,23 @@ export class UserController implements IUserController {
 
   async register(req: Request, res: Response) {
     const d=await this.userService.register(req.body);
-    return res.send(
+    return res.status(StatusCodes.CREATED).send(
       createResponse<string>(
-        "success",
+        true,
         StatusCodes.CREATED,
         CreatedMessage("User")
       )
     );
   }
   async get(req: Request, res: Response): Promise<void> {
-    const data = await this.userService.get(req.params.userID);
+    if(isUUID(req.user.id)){
+      throw HttpException.badRequest("Invalid User")
+    }
+    const data = await this.userService.get(req.user.id);
 
-    res.send(
-      createResponse<IUser>(
-        "success",
+    res.status(StatusCodes.SUCCESS).send(
+      createResponse<object>(
+        true,
         StatusCodes.SUCCESS,
         FetchMessage("User"),
         data
@@ -157,12 +161,11 @@ export class UserController implements IUserController {
   async gets(req: Request, res: Response): Promise<void> {
     const users = await this.userService.gets();
 
-    res.send(
-      createResponse<IUser>(
-        "success",
+    res.status(StatusCodes.SUCCESS).send(
+      createResponse<object>(
+        true,
         StatusCodes.SUCCESS,
         FetchMessage("List of user"),
-        undefined,
         users
       )
     );
@@ -171,9 +174,9 @@ export class UserController implements IUserController {
     const user=req.user as User
     await this.userService.delete(user.id);
 
-    res.send(
+    res.status(StatusCodes.SUCCESS).send(
       createResponse<string>(
-        "success",
+        true,
         StatusCodes.SUCCESS,
         "Your Account Deactivated"
       )
@@ -182,9 +185,9 @@ export class UserController implements IUserController {
   async update(req: Request, res: Response): Promise<void> {
     await this.userService.update(req.body);
 
-    res.send(
+    res.status(StatusCodes.CREATED).send(
       createResponse<string>(
-        "success",
+        true,
         StatusCodes.CREATED,
         UpdatedMessage("User")
       )
@@ -193,6 +196,9 @@ export class UserController implements IUserController {
   }
   async createProfile(req: Request, res: Response){
      const data=req.body as ProfileDTO
+     if(isUUID(req.user.id)){
+      throw HttpException.badRequest("Invalid User")
+     }
      const user=await this.userService.get(data.userID)
      if(user.profileStatus===true){
       throw HttpException.badRequest("You have already created profile")
@@ -204,9 +210,9 @@ export class UserController implements IUserController {
       console.log(e.message)
        await this.userService.deleProfile(profile.id)
      }
-     res.send(
+     res.status(StatusCodes.SUCCESS).send(
       createResponse<string>(
-        "success",
+        true,
         StatusCodes.CREATED,
         CreatedMessage("Profile")
       )

@@ -14,7 +14,7 @@ RequestValidator.validate(LoginDTO),
 catchAsync(userIocContainer.login.bind(userIocContainer))
 )
 
-router.post('/profile',RequestValidator.validate(ProfileDTO),catchAsync(userIocContainer.createProfile.bind(userIocContainer)))
+router.post('/profile',RequestValidator.validate(ProfileDTO) ,Authentication.Check(),catchAsync(userIocContainer.createProfile.bind(userIocContainer)))
 
 
 router.get('/refresh',
@@ -23,16 +23,18 @@ catchAsync(userIocContainer.refresh.bind(userIocContainer))
 router.get('/logout',Authentication.Check(),catchAsync(userIocContainer.logout.bind(userIocContainer)))
 router.post(
   "/register",
+
   RequestValidator.validate(RegisterDTO),
   catchAsync(userIocContainer.register.bind(userIocContainer))
 );
 router.patch(
-  "/",
+  "/profile",
+Authentication.Check(),
   RequestValidator.validate(UpdateRegisterDTO),
   catchAsync(userIocContainer.update.bind(userIocContainer))
 );
-router.get("/", catchAsync(userIocContainer.gets.bind(userIocContainer)));
-router.get("/:userID", catchAsync(userIocContainer.get.bind(userIocContainer)));
+// router.get("/", catchAsync(userIocContainer.gets.bind(userIocContainer)));
+router.get("/",Authentication.Check(), catchAsync(userIocContainer.get.bind(userIocContainer)));
 router.delete(
   "/deactivate",Authentication.Check(),
   catchAsync(userIocContainer.deactivate.bind(userIocContainer))

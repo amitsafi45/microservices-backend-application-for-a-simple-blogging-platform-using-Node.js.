@@ -11,19 +11,19 @@ constructor(userService:UserService){
 }
 
   ping(req: Request, res: Response):void {
-    const response = createResponse<string>(  "success",
+    const response = createResponse<object>(  true,
     StatusCodes.SUCCESS,
     "Pong");
     
-    res.send(response);
+    res.status(StatusCodes.SUCCESS).send(response);
   }
 
   verification(req: Request, res: Response){
-    const response = createResponse<object>(  "success",
+    const response = createResponse<object>( true,
     StatusCodes.SUCCESS,
     "User verified");
     
- return   res.send(response);
+ return   res.status(StatusCodes.SUCCESS).send(response);
    
   }
 }

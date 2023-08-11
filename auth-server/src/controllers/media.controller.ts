@@ -12,7 +12,7 @@ export class MediaController {
   async uploadSingle(req: Request, res: Response) {
     res.send(
       createResponse<object>(
-        "success",
+        true,
         StatusCodes.ACCEPTED,
         Message.mediaUploaded,
         req.file
