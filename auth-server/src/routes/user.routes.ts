@@ -34,7 +34,7 @@ Authentication.Check(),
   catchAsync(userIocContainer.update.bind(userIocContainer))
 );
 // router.get("/", catchAsync(userIocContainer.gets.bind(userIocContainer)));
-router.get("/",Authentication.Check(), catchAsync(userIocContainer.get.bind(userIocContainer)));
+router.get("/me",Authentication.Check(), catchAsync(userIocContainer.get.bind(userIocContainer)));
 router.delete(
   "/deactivate",Authentication.Check(),
   catchAsync(userIocContainer.deactivate.bind(userIocContainer))

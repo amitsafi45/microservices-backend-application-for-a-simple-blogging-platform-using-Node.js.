@@ -144,8 +144,8 @@ export class UserController implements IUserController {
     );
   }
   async get(req: Request, res: Response): Promise<void> {
-    if(isUUID(req.user.id)){
-      throw HttpException.badRequest("Invalid User")
+    if(!isUUID(req.user.id)){
+      throw HttpException.forbidden("Invalid User")
     }
     const data = await this.userService.get(req.user.id);
 

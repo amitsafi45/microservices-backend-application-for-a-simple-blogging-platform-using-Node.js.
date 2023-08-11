@@ -48,17 +48,17 @@ export class UserService  {
       where: {
         id: id,
       },
-      select: {
-        email: true,
-        username: true,
-        id: true,
-        profileStatus:true,
-      },
+     
+      include:{
+        profile:true,
+
+      }
     });
     if (!user) {
       throw HttpException.notFound(getNotFoundMessage("User"));
     }
-    return user;
+    const {password,...rest}=user
+    return rest;
   }
   async delete(id: string) {
      await prisma.user.delete({
