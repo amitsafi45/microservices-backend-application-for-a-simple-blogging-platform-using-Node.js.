@@ -27,4 +27,7 @@ GET:localhost:4001/api/auth/user/logout<br/>
 ![Screenshot from 2023-08-11 04-33-54](https://github.com/amitsafi45/microservices-backend-application-for-a-simple-blogging-platform-using-Node.js./assets/106763609/f041466d-341f-4327-b76b-de29fd872e99)
 DELETE:localhost:4001/api/auth/user/deactivate<br/>
 ![Screenshot from 2023-08-11 05-13-46](https://github.com/amitsafi45/microservices-backend-application-for-a-simple-blogging-platform-using-Node.js./assets/106763609/3bab3ad5-a150-47bb-89e9-4d97b348a59b)
-
+POST:localhost:4001/api/auth/media/upload/single<br/>
+![Screenshot from 2023-08-11 13-50-14](https://github.com/amitsafi45/microservices-backend-application-for-a-simple-blogging-platform-using-Node.js./assets/106763609/d047e2a1-0724-4513-b6a1-4bacef51f821)
+POST:localhost:4001/api/auth/user/profile<br/>
+![Screenshot from 2023-08-11 16-17-56](https://github.com/amitsafi45/microservices-backend-application-for-a-simple-blogging-platform-using-Node.js./assets/106763609/d7b86b97-6f13-49db-8e66-d6c52fbe35a2)
