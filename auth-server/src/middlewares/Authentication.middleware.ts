@@ -13,9 +13,8 @@ export default class Authentication {
       // *Convert body to class instance
       const authorization = req?.headers.authorization;
       console.log(authorization,'lllll');
-      if (!authorization) {
-        
-        return next(HttpException.noContent("Token not found"));
+      if (!authorization||authorization===undefined) {
+     return   next(HttpException.notFound("Token not found"));
       }
 
       const data = authorization.trim().split(" ");

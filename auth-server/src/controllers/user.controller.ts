@@ -149,14 +149,17 @@ export class UserController  {
     if(!isUUID(req.user.id)){
       throw HttpException.forbidden("Invalid User")
     }
+    
     const data = await this.userService.get(req.user.id);
-
+    const result={}
+    //  const path={path:`http://localhost:4001/${data.id}/${data.profile?.media?.type}/${data.profile?.media?.name}`} 
+      
     res.status(StatusCodes.SUCCESS).send(
       createResponse<object>(
         true,
         StatusCodes.SUCCESS,
         FetchMessage("User"),
-        data
+          data
       )
     );
   }

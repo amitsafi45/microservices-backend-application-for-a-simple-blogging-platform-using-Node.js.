@@ -3,6 +3,7 @@ import { ReturnResponse, createResponse } from "../utils/response";
 import { StatusCodes } from "../constants/statusCodes";
 import { autoInjectable } from "tsyringe";
 import { UserService } from "../services/user.service";
+import { User } from "@prisma/client";
 @autoInjectable()
 export class PingController {
   private userService:UserService
@@ -18,10 +19,16 @@ constructor(userService:UserService){
     res.status(StatusCodes.SUCCESS).send(response);
   }
 
-  verification(req: Request, res: Response){
+   async verification(req: Request, res: Response){
+
+
+
+
+const user=req.user as User
     const response = createResponse<object>( true,
     StatusCodes.SUCCESS,
-    "User verified");
+    "User verified",user)
+  
     
  return   res.status(StatusCodes.SUCCESS).send(response);
    
