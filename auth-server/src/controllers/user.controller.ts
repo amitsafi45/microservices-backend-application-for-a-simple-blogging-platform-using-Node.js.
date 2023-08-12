@@ -209,6 +209,7 @@ export class UserController implements IUserController {
      try{
         profile=await this.userService.createProfile(data,req.user.id)
         media=await this.mediaService.uploadFile(data.media,profile.id,req.user.id)
+        await this.userService.updateProfileStatus(user.id,true)
         res.status(StatusCodes.CREATED).send(
           createResponse<object>(
             true,
@@ -225,6 +226,7 @@ export class UserController implements IUserController {
 
         await this.userService.deleProfile(profile.id)
       }
+      await this.userService.updateProfileStatus(user.id,false)
        throw HttpException.conflict("Profile not created")
      }
    

@@ -70,14 +70,13 @@ export class UserService  {
     });
 
   }
-  async update(data: UpdateRegisterDTO): Promise<void> {
+  async updateProfileStatus(id:string,status:boolean): Promise<void> {
     const user = await prisma.user.update({
       where: {
-        id: data.id,
+        id: id,
       },
       data: {
-        username: data.username,
-        email: data.email,
+        profileStatus:status
       },
     });
     if (!user) {
@@ -109,7 +108,8 @@ export class UserService  {
           address:profileData.address,
           bio:profileData.bio,
           socialMediaLink:profileData.socialMediaLink,
-          userID:userID
+          userID:userID,
+          
 
           
           }})
