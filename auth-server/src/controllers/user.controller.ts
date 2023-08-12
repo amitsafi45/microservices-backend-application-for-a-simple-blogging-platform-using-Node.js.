@@ -16,14 +16,16 @@ import HttpException from "../utils/HttpException";
 import EnvironmentConfiguration from "../config/env.config";
 import { decode } from "jsonwebtoken";
 import { TokenService } from "../services/token.service";
-import { ProfileDTO } from "../dtos/user.dto";
+import { ProfileDTO, UpdateProfileDTO } from "../dtos/user.dto";
 import { MediaService } from "../services/media.service";
 import { autoInjectable } from "tsyringe";
-import { User } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import { isUUID } from "class-validator";
+import { TransferImage } from "../utils/transferImageFromTempTOUploadFolder.utils";
+import { prisma } from "../config/database.config";
 
 @autoInjectable()
-export class UserController implements IUserController {
+export class UserController  {
   public userService:UserService
   public tokenService:TokenService;
   public mediaService: MediaService;
@@ -182,17 +184,40 @@ export class UserController implements IUserController {
       )
     );
   }
-  async update(req: Request, res: Response): Promise<void> {
-    await this.userService.update(req.body);
+  async updateProfile(req: Request, res: Response): Promise<void> {
+    const data=req.body as UpdateProfileDTO
+    if(!isUUID(req.user.id)){
+     throw HttpException.badRequest("Invalid User")
+    }
 
-    res.status(StatusCodes.CREATED).send(
-      createResponse<string>(
-        true,
-        StatusCodes.CREATED,
-        UpdatedMessage("User")
-      )
-    );
+    const user=await this.userService.get(req.user.id)
+    if(user.profileStatus===true){
+     throw HttpException.badRequest("You have to create profile")
+    }
+    let media
+    let profile
+    try{
+       profile=await this.userService.updateProfile(data,req.user.id)
+     //  media=await this.mediaService.updateMedia(data.media,profile.id,req.user.id)
+       res.status(StatusCodes.SUCCESS).send(
+         createResponse<object>(
+           true,
+           StatusCodes.SUCCESS,
+           UpdatedMessage("Profile")
+         )
+       );
+    }catch(e:any){
+     if(media){
+     //  await this.mediaService.delete(media.id)
 
+     }
+     if(profile){
+
+       await this.userService.deleProfile(profile.id)
+     }
+      throw HttpException.conflict("Profile not updated")
+    }
+  
   }
   async createProfile(req: Request, res: Response){
      const data=req.body as ProfileDTO
@@ -206,29 +231,25 @@ export class UserController implements IUserController {
      }
      let media
      let profile
-     try{
-        profile=await this.userService.createProfile(data,req.user.id)
-        media=await this.mediaService.uploadFile(data.media,profile.id,req.user.id)
-        await this.userService.updateProfileStatus(user.id,true)
+    
+        await prisma.$transaction(async(connection)=>{
+          profile=await this.userService.createProfile(data,req.user.id,connection)
+          media=await this.mediaService.uploadFile(data.media,profile.id,req.user.id,connection)
+          const instance=TransferImage.getInstance()
+          instance.setInfo(req.user.id,media.type,media.name)
+          instance.tempTOUploadFolder()
+          
+        })
+        await prisma.$disconnect()
         res.status(StatusCodes.CREATED).send(
-          createResponse<object>(
-            true,
-            StatusCodes.CREATED,
-            CreatedMessage("Profile")
-          )
-        );
-     }catch(e:any){
-      if(media){
-        await this.mediaService.delete(media.id)
+                 createResponse<object>(
+                   true,
+                   StatusCodes.CREATED,
+                   CreatedMessage("Profile")
 
-      }
-      if(profile){
-
-        await this.userService.deleProfile(profile.id)
-      }
-      await this.userService.updateProfileStatus(user.id,false)
-       throw HttpException.conflict("Profile not created")
-     }
+                 ))
+    
+   
    
   }
 }

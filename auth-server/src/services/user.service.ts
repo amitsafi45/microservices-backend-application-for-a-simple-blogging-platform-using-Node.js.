@@ -10,6 +10,7 @@ import {
 import BcryptService from "../utils/bcrypt.utils";
 import { Message } from "../constants/message";
 import { autoInjectable } from "tsyringe";
+import { ConnectorType } from "@prisma/client/runtime/library";
 @autoInjectable()
 export class UserService  {
  
@@ -103,8 +104,8 @@ export class UserService  {
   }
 
 
-  async createProfile(profileData:ProfileDTO,userID:string){
-       return await prisma.profile.create({data:{
+  async createProfile(profileData:ProfileDTO,userID:string,connection:any){
+       return await connection.profile.create({data:{
           address:profileData.address,
           bio:profileData.bio,
           socialMediaLink:profileData.socialMediaLink,
@@ -114,6 +115,21 @@ export class UserService  {
           
           }})
   }
+  async updateProfile(profileData:ProfileDTO,userID:string){
+    return await prisma.profile.update({
+    where:{
+      userID:userID
+    }
+      ,data:{
+       address:profileData.address,
+       bio:profileData.bio,
+       socialMediaLink:profileData.socialMediaLink,
+       
+
+       
+       }})
+}
+
   async deleProfile(id:string){
     await prisma.profile.delete({
       where:{

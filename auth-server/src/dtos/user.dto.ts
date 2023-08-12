@@ -68,3 +68,7 @@ export class  ProfileDTO{
 
 
 }
+
+export class UpdateProfileDTO extends ProfileDTO{
+   
+}

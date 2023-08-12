@@ -27,12 +27,12 @@ router.post(
   RequestValidator.validate(RegisterDTO),
   catchAsync(userIocContainer.register.bind(userIocContainer))
 );
-router.patch(
-  "/profile",
-Authentication.Check(),
-  RequestValidator.validate(UpdateRegisterDTO),
-  catchAsync(userIocContainer.update.bind(userIocContainer))
-);
+  // router.patch(
+  //   "/profile",
+  // Authentication.Check(),
+  //   RequestValidator.validate(UpdateRegisterDTO),
+  //   catchAsync(userIocContainer.update.bind(userIocContainer))
+  // );
 // router.get("/", catchAsync(userIocContainer.gets.bind(userIocContainer)));
 router.get("/me",Authentication.Check(), catchAsync(userIocContainer.get.bind(userIocContainer)));
 router.delete(
