@@ -186,37 +186,31 @@ export class UserController  {
   }
   async updateProfile(req: Request, res: Response): Promise<void> {
     const data=req.body as UpdateProfileDTO
-    if(!isUUID(req.user.id)){
-     throw HttpException.badRequest("Invalid User")
-    }
+   const user=req.user as User
 
-    const user=await this.userService.get(req.user.id)
-    if(user.profileStatus===true){
-     throw HttpException.badRequest("You have to create profile")
+    if(user.profileStatus!==true){
+     throw HttpException.badRequest("Profile not found")
     }
     let media
     let profile
-    try{
-       profile=await this.userService.updateProfile(data,req.user.id)
-     //  media=await this.mediaService.updateMedia(data.media,profile.id,req.user.id)
+   
+       await prisma.$transaction(async(connection)=>{
+         profile=await this.userService.updateProfile(data,req.user.id,connection)
+         media=await this.mediaService.updateMedia(data.media,profile.id,req.user.id,connection)
+         const instance=TransferImage.getInstance()
+         instance.setInfo(req.user.id,media.type,media.name)
+         instance.tempTOUploadFolder()
+         
+       })
+       await prisma.$disconnect()
        res.status(StatusCodes.SUCCESS).send(
-         createResponse<object>(
-           true,
-           StatusCodes.SUCCESS,
-           UpdatedMessage("Profile")
-         )
-       );
-    }catch(e:any){
-     if(media){
-     //  await this.mediaService.delete(media.id)
+                createResponse<object>(
+                  true,
+                  StatusCodes.SUCCESS,
+                  UpdatedMessage("Profile")
 
-     }
-     if(profile){
-
-       await this.userService.deleProfile(profile.id)
-     }
-      throw HttpException.conflict("Profile not updated")
-    }
+                ))
+ 
   
   }
   async createProfile(req: Request, res: Response){
@@ -224,7 +218,6 @@ export class UserController  {
      if(!isUUID(req.user.id)){
       throw HttpException.badRequest("Invalid User")
      }
-
      const user=await this.userService.get(req.user.id)
      if(user.profileStatus===true){
       throw HttpException.badRequest("You have already created profile")
@@ -235,12 +228,13 @@ export class UserController  {
         await prisma.$transaction(async(connection)=>{
           profile=await this.userService.createProfile(data,req.user.id,connection)
           media=await this.mediaService.uploadFile(data.media,profile.id,req.user.id,connection)
+          await this.userService.updateProfileStatus(req.user.id,true,connection)
           const instance=TransferImage.getInstance()
           instance.setInfo(req.user.id,media.type,media.name)
           instance.tempTOUploadFolder()
           
         })
-        await prisma.$disconnect()
+          await prisma.$disconnect()
         res.status(StatusCodes.CREATED).send(
                  createResponse<object>(
                    true,

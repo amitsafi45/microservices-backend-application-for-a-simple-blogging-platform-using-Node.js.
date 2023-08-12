@@ -71,8 +71,8 @@ export class UserService  {
     });
 
   }
-  async updateProfileStatus(id:string,status:boolean): Promise<void> {
-    const user = await prisma.user.update({
+  async updateProfileStatus(id:string,status:boolean,connection:any): Promise<void> {
+    const user = await connection.user.update({
       where: {
         id: id,
       },
@@ -115,8 +115,8 @@ export class UserService  {
           
           }})
   }
-  async updateProfile(profileData:ProfileDTO,userID:string){
-    return await prisma.profile.update({
+  async updateProfile(profileData:ProfileDTO,userID:string,connection:any){
+    return await connection.profile.update({
     where:{
       userID:userID
     }

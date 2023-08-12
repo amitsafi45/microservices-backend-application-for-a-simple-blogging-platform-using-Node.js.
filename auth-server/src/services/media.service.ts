@@ -25,21 +25,18 @@ export class MediaService {
       profileID:profileID
 
     }})
-    // const instance=TransferImage.getInstance()
-    // instance.setInfo(userID,newMedia.type,newMedia.name)
-    // instance.tempTOUploadFolder()
+ 
     return newMedia
   }
 
-async delete(id:string){
-    await  prisma.media.delete({where:{
+async delete(id:string,connection:any){
+    await  connection.media.delete({where:{
       id:id
     }})
 }
 
-async updateMedia(data: MediaDTO, profileID: string,userID:string,connection:PrismaClient){
+async updateMedia(data: MediaDTO, profileID: string,userID:string,connection:any){
   if (!existsSync(path.join(this.TEMP_FOLDER_PATH, data.type, data.name))) {
-    console.log(path.join(this.TEMP_FOLDER_PATH, data.type, data.name),"popoppo")
     throw HttpException.badRequest('Sorry file does not exists')
   }
   let newMedia = await connection.media.update({

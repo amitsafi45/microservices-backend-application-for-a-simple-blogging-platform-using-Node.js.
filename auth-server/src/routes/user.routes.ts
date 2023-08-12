@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {UserController} from "../controllers/user.controller";
-import { LoginDTO, ProfileDTO, RegisterDTO, UpdateRegisterDTO } from "../dtos/user.dto";
+import { LoginDTO, ProfileDTO, RegisterDTO, UpdateProfileDTO, UpdateRegisterDTO } from "../dtos/user.dto";
 import RequestValidator from "../middlewares/RequestValidator.middleware";
 import { catchAsync } from "../utils/catchAsync";
 import { container } from "tsyringe";
@@ -27,13 +27,12 @@ router.post(
   RequestValidator.validate(RegisterDTO),
   catchAsync(userIocContainer.register.bind(userIocContainer))
 );
-  // router.patch(
-  //   "/profile",
-  // Authentication.Check(),
-  //   RequestValidator.validate(UpdateRegisterDTO),
-  //   catchAsync(userIocContainer.update.bind(userIocContainer))
-  // );
-// router.get("/", catchAsync(userIocContainer.gets.bind(userIocContainer)));
+  router.patch(
+    "/profile",
+  Authentication.Check(),
+    RequestValidator.validate(UpdateProfileDTO),
+    catchAsync(userIocContainer.updateProfile.bind(userIocContainer))
+  );
 router.get("/me",Authentication.Check(), catchAsync(userIocContainer.get.bind(userIocContainer)));
 router.delete(
   "/deactivate",Authentication.Check(),
