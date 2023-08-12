@@ -48,6 +48,7 @@ export class PostService{
        if(!post){
         throw HttpException.badRequest(getNotFoundMessage("Post"))
       }
+      console.log(post,"pppp")
       return post
       }
 

@@ -23,10 +23,10 @@ export class BlogController{
     async create(req:Request,res:Response){
         console.log(req.user,"user")
         await this.postService.create(req.body,req.user.id)
-        return res.status(StatusCodes.SUCCESS).send(
+        return res.status(StatusCodes.CREATED).send(
             createResponse<object>(
               true,
-              StatusCodes.SUCCESS,
+              StatusCodes.CREATED,
               CreatedMessage("Post")
             )
           );
@@ -57,7 +57,7 @@ export class BlogController{
     }
 
     async get(req:Request,res:Response){
-      if(isUUID(req.params.postID)){
+      if(!isUUID(req.params.postID)){
         throw HttpException.badRequest("Invalid Post ID")
       }
     const post=  await this.postService.get(req.params.postID)
@@ -66,7 +66,8 @@ export class BlogController{
             true,
             StatusCodes.SUCCESS,
             FetchMessage("Post"),
-            post
+            post,
+            undefined
           ),
         );
     }
@@ -132,7 +133,7 @@ const comment=  await this.postService.get(req.params.postID)
         true,
         StatusCodes.SUCCESS,
         FetchMessage("Comment"),
-        comment
+        comment,
       ),
     );
 }
