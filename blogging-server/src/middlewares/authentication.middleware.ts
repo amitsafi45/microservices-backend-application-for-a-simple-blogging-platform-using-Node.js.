@@ -13,51 +13,39 @@ export default class Authentication {
       console.log(authorization,'lllll');
       if (!authorization) {
         
-        return next(HttpException.badRequest(Message.unAuthorized));
+        return next(HttpException.badRequest("11"));
       }
 
       const data = authorization.trim().split(" ");
 
       if (data.length !== 2) {
-       return  next( HttpException.badRequest(Message.unAuthorized));
+       return  next( HttpException.badRequest("22"));
       }
 
       const mode = data[0];
       const token = data[1];
-      try {
-        let data;
-        if (mode !== Mode.BEARER||"Bearer") {
-       
-            return  next( HttpException.badRequest(Message.unAuthorized));
+      let responses:any
+      
         
-        }
-        axios.get('http://localhost:4000/api/auth/ping/verification').then((response)=>{
-            console.log("response",response.data)
-              
+         responses=axios.get('http://localhost:4001/api/auth/ping/verification',{
+               headers:{
+                Authorization:authorization
+               }
+            }).then((response)=>{
+            console.log("response",response.data.code,"llllpppppppppp")
+            req.user=response.data
+            // return respons
+              next()
        }).catch((error)=>{
-        // console.log("dddd")
-          console.log(error.message)
+       
+         return next( HttpException.serviceUnAvailable("lll"))
        })
+      
 
-        // const { id, email } = data;
-        // let user;
-        // user = await prisma.user.findFirst({
-        //   where: {
-        //     id: id,
-        //     email: email,
-        //   },
-        // });
-        // if (!user) {
-        //   throw HttpException.badRequest(Message.unAuthorized);
-        // }
-        // const { password, ...rest } = user;
-        // req.user = rest;
-        next();
-      } catch (err: any) {
-        console.error(err.toString());
-        
-       return  next(HttpException.badRequest(Message.unAuthorized));
-      }
+     
+        // next();
+      } 
+      
     };
   };
-}
+

@@ -36,6 +36,9 @@ class HttpException extends Error {
   static noContent(message: string) {
     return new HttpException(message, StatusCodes.NO_CONTENT,StatusCodes.NO_CONTENT)
   }
+  static serviceUnAvailable(message: string) {
+    return new HttpException(message, StatusCodes.SERVICE_UNAVAILABLE,StatusCodes.SERVICE_UNAVAILABLE)
+  }
 }
 
 export default HttpException

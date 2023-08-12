@@ -2,6 +2,7 @@ import { Router } from "express"
 import { Message } from "../constants/message"
 import pingRoutes from './ping.routes'
 import mediaRoutes from './media.routes'
+import postRoutes from './blog.routes'
 export type Route = {
     path: string
     route: Router
@@ -17,7 +18,10 @@ export type Route = {
     {
       path:'/media',
       route:mediaRoutes
-    }
+    },
+    {
+      path:"/post",
+      route:postRoutes} 
   ];
   
   // *Instantiate all the routes

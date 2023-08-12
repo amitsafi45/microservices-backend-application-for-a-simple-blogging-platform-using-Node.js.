@@ -5,9 +5,10 @@ import { container } from "tsyringe";
 import { BlogController } from "../controllers/blog.controller";
 import RequestValidator from "../middlewares/RequestValidator.middleware";
 import { CommentDTO, PostDTO, UpdatePostDTO } from "../dtos/blog.dto";
+import Authentication from "../middlewares/authentication.middleware";
 const router=Router()
 const iocBlogContainer=container.resolve(BlogController)
-router.post('/',RequestValidator.validate(PostDTO),catchAsync(iocBlogContainer.create.bind(iocBlogContainer)))
+router.post('/',Authentication.Check(),RequestValidator.validate(PostDTO),catchAsync(iocBlogContainer.create.bind(iocBlogContainer)))
 router.patch('/',RequestValidator.validate(UpdatePostDTO),catchAsync(iocBlogContainer.update.bind(iocBlogContainer)))
 router.get('/',catchAsync(iocBlogContainer.gets.bind(iocBlogContainer)))
 router.get('/:postID',catchAsync(iocBlogContainer.get.bind(iocBlogContainer)))
