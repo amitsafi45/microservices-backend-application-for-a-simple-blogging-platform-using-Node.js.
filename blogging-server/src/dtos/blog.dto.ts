@@ -36,7 +36,15 @@ export class CommentDTO{
     @IsString()
     content:string
 }
+export class UpdateCommentDTO{
+    @IsNotEmpty()
+    @IsUUID()
+    commentID:string
 
+    @IsNotEmpty()
+    @IsString()
+    content:string
+}
 
 export class UpdatePostDTO extends PostDTO{
     @IsNotEmpty()
@@ -47,13 +55,7 @@ export class UpdatePostDTO extends PostDTO{
 
 }
 
-export class UpdateCommentDTO extends CommentDTO{
-    @IsNotEmpty()
-    @IsUUID()
-    commentID:string
-    
 
-}
 
 // export class PostLikeDTO{
 //     @IsNotEmpty()
