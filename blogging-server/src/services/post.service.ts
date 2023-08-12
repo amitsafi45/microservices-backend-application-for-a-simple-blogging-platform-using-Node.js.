@@ -7,6 +7,7 @@ import { getNotFoundMessage } from "../utils/responseMessage.utils";
 @autoInjectable()
 export class PostService{
       async create(data:PostDTO,authorID:string){
+        console.log(data,"data")
          await prisma.post.create({data:{
            title:data.title,
            content:data.content,

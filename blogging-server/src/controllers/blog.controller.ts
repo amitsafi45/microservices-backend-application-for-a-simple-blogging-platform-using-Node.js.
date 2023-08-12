@@ -21,8 +21,8 @@ export class BlogController{
         this.likesService=likesService
     }
     async create(req:Request,res:Response){
-        let authorID=await createUUID()
-        await this.postService.create(req.body,authorID)
+        console.log(req.user,"user")
+        await this.postService.create(req.body,req.user.id)
         return res.status(StatusCodes.SUCCESS).send(
             createResponse<object>(
               true,
@@ -34,8 +34,7 @@ export class BlogController{
 
 
     async update(req:Request,res:Response){
-      let authorID=await createUUID()
-      await this.postService.update(req.body,authorID)
+      await this.postService.update(req.body,req.user.id)
       return res.status(StatusCodes.SUCCESS).send(
           createResponse<object>(
             true,

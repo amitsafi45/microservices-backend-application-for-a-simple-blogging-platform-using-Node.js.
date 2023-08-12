@@ -33,7 +33,7 @@ export default class Authentication {
                }
             }).then((response)=>{
             console.log("response",response.data.code,"llllpppppppppp")
-            req.user=response.data
+            req.user=response.data.data
             // return respons
               next()
        }).catch((error)=>{
