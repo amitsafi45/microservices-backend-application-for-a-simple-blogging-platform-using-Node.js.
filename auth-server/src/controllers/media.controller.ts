@@ -10,10 +10,10 @@ import { autoInjectable } from 'tsyringe';
 export class MediaController {
   constructor() {}
   async uploadSingle(req: Request, res: Response) {
-    res.send(
+    res.status(StatusCodes.CREATED).send(
       createResponse<object>(
         true,
-        StatusCodes.ACCEPTED,
+        StatusCodes.CREATED,
         Message.mediaUploaded,
         req.file
       )

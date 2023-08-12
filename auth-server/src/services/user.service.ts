@@ -50,8 +50,12 @@ export class UserService  {
       },
      
       include:{
-        profile:true,
-
+        profile:{
+          include:{
+            media:true
+          }
+        },
+        
       }
     });
     if (!user) {
@@ -100,12 +104,12 @@ export class UserService  {
   }
 
 
-  async createProfile(profileData:ProfileDTO){
+  async createProfile(profileData:ProfileDTO,userID:string){
        return await prisma.profile.create({data:{
           address:profileData.address,
           bio:profileData.bio,
           socialMediaLink:profileData.socialMediaLink,
-          userID:profileData.userID
+          userID:userID
 
           
           }})

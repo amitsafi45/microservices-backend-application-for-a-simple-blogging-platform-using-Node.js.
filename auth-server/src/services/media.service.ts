@@ -14,7 +14,7 @@ export class MediaService {
     
     this.TEMP_FOLDER_PATH = path.join(__dirname, '..', '..', 'public', 'temp')
   }
-  async uploadFile(data: MediaDTO, id: string) {
+  async uploadFile(data: MediaDTO, profileID: string,userID:string) {
     if (!existsSync(path.join(this.TEMP_FOLDER_PATH, data.type, data.name))) {
       console.log(path.join(this.TEMP_FOLDER_PATH, data.type, data.name),"popoppo")
       throw HttpException.badRequest('Sorry file does not exists')
@@ -22,12 +22,12 @@ export class MediaService {
     let newMedia = await prisma.media.create({data:{
       name: data.name,
       type: data.type,
-      profileID:id
+      profileID:profileID
 
     }})
     console.log(newMedia,"llll[p[[[[[[")
     const instance=TransferImage.getInstance()
-    instance.setInfo(newMedia.id,newMedia.type,newMedia.name)
+    instance.setInfo(userID,newMedia.type,newMedia.name)
     instance.tempTOUploadFolder()
     return newMedia
   }

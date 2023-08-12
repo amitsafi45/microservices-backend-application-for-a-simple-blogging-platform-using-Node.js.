@@ -199,16 +199,17 @@ export class UserController implements IUserController {
      if(!isUUID(req.user.id)){
       throw HttpException.badRequest("Invalid User")
      }
-     const user=await this.userService.get(data.userID)
+
+     const user=await this.userService.get(req.user.id)
      if(user.profileStatus===true){
       throw HttpException.badRequest("You have already created profile")
      }
      let media
      let profile
      try{
-        profile=await this.userService.createProfile(data)
-        media=await this.mediaService.uploadFile(data.media,profile.id)
-        res.status(StatusCodes.SUCCESS).send(
+        profile=await this.userService.createProfile(data,req.user.id)
+        media=await this.mediaService.uploadFile(data.media,profile.id,req.user.id)
+        res.status(StatusCodes.CREATED).send(
           createResponse<object>(
             true,
             StatusCodes.CREATED,
