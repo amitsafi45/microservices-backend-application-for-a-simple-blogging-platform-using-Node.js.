@@ -48,6 +48,7 @@ export class UserService {
     });
     return data;
   }
+  
   async get(id: string) {
     const user = await prisma.user.findFirst({
       where: {
@@ -59,7 +60,7 @@ export class UserService {
           include: {
             media: true,
           },
-        },
+        }
       },
     });
     if (!user) {

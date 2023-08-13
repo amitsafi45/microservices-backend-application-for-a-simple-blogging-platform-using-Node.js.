@@ -3,6 +3,7 @@ import { Message } from "../constants/message"
 import pingRoutes from './ping.routes'
 import userRoutes from './user.routes'
 import mediaRoutes from './media.routes'
+import HttpException from "../utils/HttpException"
 export type Route = {
     path: string
     route: Router
@@ -28,7 +29,9 @@ export type Route = {
   routes.forEach((route) => {
     router.use(route.path, route.route)
   })
-  
+  router.all('/*',(req,res)=>{
+    throw HttpException.notFound("Method Not Found  ")
+  })
   // *Route to ensure that server is currently running
   router.get('/', (req, res) => {
     res.send({
