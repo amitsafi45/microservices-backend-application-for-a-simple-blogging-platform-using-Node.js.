@@ -1,5 +1,5 @@
 Arguments: 
-  /home/amit/.nvm/versions/node/v19.3.0/bin/node /home/amit/.nvm/versions/node/v19.3.0/bin/yarn add tsyring
+  /home/amit/.nvm/versions/node/v19.3.0/bin/node /home/amit/.nvm/versions/node/v19.3.0/bin/yarn add cookieParser
 
 PATH: 
   /home/amit/.nvm/versions/node/v19.3.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/tsyring: Not found
+  Error: https://registry.yarnpkg.com/cookieParser: Not found
       at params.callback [as _callback] (/home/amit/.nvm/versions/node/v19.3.0/lib/node_modules/yarn/lib/cli.js:66145:18)
       at self.callback (/home/amit/.nvm/versions/node/v19.3.0/lib/node_modules/yarn/lib/cli.js:140890:22)
       at Request.emit (node:events:513:28)
@@ -45,16 +45,20 @@ npm manifest:
       "cors": "^2.8.5",
       "dotenv": "^16.3.1",
       "express": "^4.18.2",
+      "express-fileupload": "^1.4.0",
       "express-rate-limit": "^6.8.1",
+      "form-data": "^4.0.0",
       "http-status-codes": "^2.2.0",
       "morgan": "^1.10.0",
       "reflect-metadata": "^0.1.13",
-      "ts-node": "^10.9.1"
+      "ts-node": "^10.9.1",
+      "tsyringe": "^4.8.0"
     },
     "devDependencies": {
       "@types/compression": "^1.7.2",
       "@types/cors": "^2.8.13",
       "@types/express": "^4.17.17",
+      "@types/express-fileupload": "^1.4.1",
       "@types/morgan": "^1.9.4",
       "@types/node": "^20.4.2",
       "prisma": "^5.1.1",
@@ -141,6 +145,13 @@ Lockfile:
       "@types/connect" "*"
       "@types/node" "*"
   
+  "@types/busboy@*":
+    version "1.5.0"
+    resolved "https://registry.yarnpkg.com/@types/busboy/-/busboy-1.5.0.tgz#62681556cbbd2afc8d2efa6bafaa15602f0838b9"
+    integrity sha512-ncOOhwmyFDW76c/Tuvv9MA9VGYUCn8blzyWmzYELcNGDb0WXWLSmFi7hJq25YdRBYJrmMBB5jZZwUjlJe9HCjQ==
+    dependencies:
+      "@types/node" "*"
+  
   "@types/compression@^1.7.2":
     version "1.7.2"
     resolved "https://registry.yarnpkg.com/@types/compression/-/compression-1.7.2.tgz#7cc1cdb01b4730eea284615a68fc70a2cdfd5e71"
@@ -161,6 +172,14 @@ Lockfile:
     integrity sha512-RG8AStHlUiV5ysZQKq97copd2UmVYw3/pRMLefISZ3S1hK104Cwm7iLQ3fTKx+lsUH2CE8FlLaYeEA2LSeqYUA==
     dependencies:
       "@types/node" "*"
+  
+  "@types/express-fileupload@^1.4.1":
+    version "1.4.1"
+    resolved "https://registry.yarnpkg.com/@types/express-fileupload/-/express-fileupload-1.4.1.tgz#3388b14dedfa877be43bbe0540dcd5e13e963bca"
+    integrity sha512-sbl865h1Sser6SF+efpw2F/+roGISj+PRIbMcGXbtzgJQCBAeeBmoSo7sPge/mBa22ymCHfFPtHFsag/wUxwfg==
+    dependencies:
+      "@types/busboy" "*"
+      "@types/express" "*"
   
   "@types/express-serve-static-core@^4.17.33":
     version "4.17.35"
@@ -356,6 +375,13 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.2.tgz#2b146a6fd72e80b4f55d255f35ed59a3a9a41bd5"
     integrity sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==
   
+  busboy@^1.6.0:
+    version "1.6.0"
+    resolved "https://registry.yarnpkg.com/busboy/-/busboy-1.6.0.tgz#966ea36a9502e43cdb9146962523b92f531f6893"
+    integrity sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==
+    dependencies:
+      streamsearch "^1.1.0"
+  
   bytes@3.0.0:
     version "3.0.0"
     resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.0.0.tgz#d32815404d689699f85a4ea4fa8755dd13a96048"
@@ -528,6 +554,13 @@ Lockfile:
     version "1.8.1"
     resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
     integrity sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==
+  
+  express-fileupload@^1.4.0:
+    version "1.4.0"
+    resolved "https://registry.yarnpkg.com/express-fileupload/-/express-fileupload-1.4.0.tgz#be9d70a881d6c2b1ce668df86e4f89ddbf238ec7"
+    integrity sha512-RjzLCHxkv3umDeZKeFeMg8w7qe0V09w3B7oGZprr/oO2H/ISCgNzuqzn7gV3HRWb37GjRk429CCpSLS2KNTqMQ==
+    dependencies:
+      busboy "^1.6.0"
   
   express-rate-limit@^6.8.1:
     version "6.9.0"
@@ -1045,6 +1078,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/statuses/-/statuses-2.0.1.tgz#55cb000ccf1d48728bd23c685a063998cf1a1b63"
     integrity sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==
   
+  streamsearch@^1.1.0:
+    version "1.1.0"
+    resolved "https://registry.yarnpkg.com/streamsearch/-/streamsearch-1.1.0.tgz#404dd1e2247ca94af554e841a8ef0eaa238da764"
+    integrity sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==
+  
   strip-bom@^3.0.0:
     version "3.0.0"
     resolved "https://registry.yarnpkg.com/strip-bom/-/strip-bom-3.0.0.tgz#2334c18e9c759f7bdd56fdef7e9ae3d588e68ed3"
@@ -1121,6 +1159,18 @@ Lockfile:
       "@types/strip-json-comments" "0.0.30"
       strip-bom "^3.0.0"
       strip-json-comments "^2.0.0"
+  
+  tslib@^1.9.3:
+    version "1.14.1"
+    resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
+    integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
+  
+  tsyringe@^4.8.0:
+    version "4.8.0"
+    resolved "https://registry.yarnpkg.com/tsyringe/-/tsyringe-4.8.0.tgz#d599651b36793ba872870fee4f845bd484a5cac1"
+    integrity sha512-YB1FG+axdxADa3ncEtRnQCFq/M0lALGLxSZeVNbTU8NqhOVc51nnv2CISTcvc1kyv6EGPtXVr0v6lWeDxiijOA==
+    dependencies:
+      tslib "^1.9.3"
   
   type-is@~1.6.18:
     version "1.6.18"

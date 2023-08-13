@@ -16,8 +16,6 @@ const client = async () => {
 
 router.all("/:serviceName/:target", async (req: Request, res: Response) => {
   const clientDetail = await client();
-  console.log("first", clientDetail);
-  console.log("second", clientDetail.length);
   if (clientDetail.length <= 0) {
     // throw HttpException.noContent("ppp")
     res.status(StatusCodes.NO_CONTENT).send({
@@ -46,29 +44,34 @@ router.all("/:serviceName/:target", async (req: Request, res: Response) => {
       switch (req.method.toString()) {
         case "POST":
           if (req.params.target === "media") {
-            console.log(req.files, "pppppp");
+            const files = req.files;
 
-            const form = new FormData(); // Create a new FormData instance
+            if (!files) {
+              return res.status(400).send("No files were uploaded.");
+            }
 
-            // Append the media file to the FormData object
-            //@ts-ignore
-            // form.append("media", req.files, {
-            //   filename: req.file.originalname,
-            //   contentType: req.file.mimetype,
-            // });
-
-            form.append("media", req.files);
-
-            // ... (other code)
-
+            const formData = new FormData();
+            Object.keys(files).forEach((fileKey) => {
+              //@ts-ignore
+              formData.append("media", files[fileKey].data, {
+                //@ts-ignore
+                filename: files[fileKey].name,
+                //@ts-ignore
+                contentType: files[fileKey].mimetype,
+              });
+              Object.entries(req.body as object).forEach(([key, value]) => {
+                console.log(key, value, "key values");
+                formData.append(key, value);
+              });
+            });
             axios
-              .post(url,{
-                // withCredentials: true,
+              //@ts-ignore
+              .post(url, formData, {
+                withCredentials: true,
                 headers: {
                   "Content-Type": "multipart/form-data", // Set the content type for form data
                   Authorization: req.headers.authorization,
                 },
-            
               })
               .then((response) => {
                 res.send(response.data);
@@ -81,12 +84,27 @@ router.all("/:serviceName/:target", async (req: Request, res: Response) => {
                 });
               });
           } else {
+            console.log(req.headers.authorization, "pppppp");
             axios
-              .post(url, req.body, { withCredentials: true })
+              .post(url, req.body, {
+                withCredentials: true,
+                headers: {
+                  Authorization: req.headers.authorization,
+                },
+              })
               .then((response) => {
+                if (response.headers["set-cookie"]) {
+                  const cookie = response.headers["set-cookie"];
+
+                  // Forward the cookie to the end users
+
+                  //@ts-ignore
+                  res.setHeader("set-cookie", cookie);
+                }
                 res.send(response.data);
               })
               .catch((error) => {
+                console.log(error, "llll");
                 return res.status(error.response.status).json({
                   success: error.response.data.success,
                   code: error.response.data.code,
@@ -101,7 +119,11 @@ router.all("/:serviceName/:target", async (req: Request, res: Response) => {
             .get(url, {
               withCredentials: true,
               data: req.body,
-              headers: { Authorization: req.headers.authorization },
+
+              headers: {
+                Authorization: req.headers.authorization,
+                cookie: JSON.stringify(req.cookies),
+              },
             })
             .then((response) => {
               res.send(response.data);
