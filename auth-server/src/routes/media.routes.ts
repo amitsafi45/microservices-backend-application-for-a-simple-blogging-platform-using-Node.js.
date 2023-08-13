@@ -7,5 +7,5 @@ import Authentication from "../middlewares/Authentication.middleware"
 const router = Router()
 const iocMediaContainer=container.resolve(MediaController)
 const iocUploadContainer=container.resolve(Upload)
-router.post('/upload/single',Authentication.Check(), iocUploadContainer.single("media").bind(iocUploadContainer), catchAsync(iocMediaContainer.uploadSingle.bind(iocMediaContainer)))
+router.post('/upload-single',iocUploadContainer.single("media").bind(iocUploadContainer), catchAsync(iocMediaContainer.uploadSingle.bind(iocMediaContainer)))
 export default router
