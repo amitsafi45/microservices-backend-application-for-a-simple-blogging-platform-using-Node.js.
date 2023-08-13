@@ -1,9 +1,11 @@
 import { Request, Response, Router, response } from "express";
-import {  ServiceRegistryService } from "../services/serviceRegistry.service";
+import { ServiceRegistryService } from "../services/serviceRegistry.service";
 import axios from "axios";
 import { container } from "tsyringe";
 import HttpException from "../utils/HttpException";
 import { Status } from "../constants/enum";
+import { StatusCodes } from "../constants/statusCodes";
+import { catchAsync } from "../utils/catchAsync";
 const router = Router();
 const client = async () => {
   return await container.resolve(ServiceRegistryService).gets();
@@ -15,7 +17,7 @@ router.all("/:serviceName/:target", async (req: Request, res: Response) => {
     if (endPoint.serviceName === req.params.serviceName) {
       if (endPoint.status === Status.DIE) {
         throw HttpException.badRequest(
-          " Requested Service are available for some time Please try later"
+          " Requested Service are  not available for some time Please try later"
         );
       }
       let url;
@@ -27,52 +29,75 @@ router.all("/:serviceName/:target", async (req: Request, res: Response) => {
       switch (req.method.toString()) {
         case "POST":
           axios
-            .post(url, req.body)
+            .post(url,req.body,{withCredentials:true})
             .then((response) => {
-              console.log(response.data, "kkkk");
               res.send(response.data);
             })
             .catch((error) => {
-              res.status(500).send("Something went wrong with client");
+              return res.status( error.response.status).json({
+                success: error.response.data.success,
+                code: error.response.data.code,
+                message: error.response.data.message,
+              });
             });
           break;
         case "GET":
           axios
-            .get(url, req.body)
+            .get(url,{withCredentials:true,data:req.body,headers:{Authorization:req.headers.authorization}})
             .then((response) => {
               res.send(response.data);
             })
             .catch((error) => {
-              res.status(500).send("Something went wrong with client");
+
+              return res.status( error.response.status).json({
+                success: error.response.data.success,
+                code: error.response.data.code,
+                message: error.response.data.message,
+              });
             });
           break;
         case "PATCH":
           axios
-            .patch(url, req.body)
+            .patch(url, {withCredentials:true,data:req.body,headers:{Authorization:req.headers.authorization}})
             .then((response) => {
-              console.log(response.data, "kkkk");
               res.send(response.data);
             })
             .catch((error) => {
-              res.status(500).send("Something went wrong with client");
+              return res.status( error.response.status).json({
+                success: error.response.data.success,
+                code: error.response.data.code,
+                message: error.response.data.message,
+              });
             });
           break;
         case "DELETE":
           axios
-            .delete(url, req.body)
+            .delete(url, {withCredentials:true,data:req.body,headers:{Authorization:req.headers.authorization}})
             .then((response) => {
               console.log(response.data, "kkkk");
               res.send(response.data);
             })
             .catch((error) => {
-              res.status(500).send("Something went wrong with client");
+              return res.status( error.response.status).json({
+                success: error.response.data.success,
+                code: error.response.data.code,
+                message: error.response.data.message,
+              });
             });
           break;
         default:
-          res.status(500).send("Method not found");
+          return res.status(StatusCodes.METHOD_NOT_ALLOWED).json({
+            success: false,
+            code: StatusCodes.METHOD_NOT_ALLOWED,
+            message: "Method Not Found",
+          });
       }
     } else {
-      throw HttpException.notFound("Service not found");
+      return res.status(StatusCodes.METHOD_NOT_ALLOWED).json({
+        success: false,
+        code: StatusCodes.METHOD_NOT_ALLOWED,
+        message: "Service Not Found",
+      });
     }
   });
 });

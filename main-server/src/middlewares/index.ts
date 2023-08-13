@@ -11,7 +11,7 @@ const middleware = async (app: Application) => {
     app.use(compression());
     app.use(morgan("dev"))
     app.use(rateLimiter)
-    app.use(cors({ origin: "*" }));
+    app.use(cors({ origin: "*",credentials:true }));
 
     app.use(express.json());
     app.use('/service-registry/api',serviceRegistryRoutes)
