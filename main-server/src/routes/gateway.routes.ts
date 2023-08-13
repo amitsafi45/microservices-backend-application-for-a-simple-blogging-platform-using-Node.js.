@@ -84,7 +84,6 @@ router.all("/:serviceName/:target", async (req: Request, res: Response) => {
                 });
               });
           } else {
-            console.log(req.headers.authorization, "pppppp");
             axios
               .post(url, req.body, {
                 withCredentials: true,
@@ -104,7 +103,6 @@ router.all("/:serviceName/:target", async (req: Request, res: Response) => {
                 res.send(response.data);
               })
               .catch((error) => {
-                console.log(error, "llll");
                 return res.status(error.response.status).json({
                   success: error.response.data.success,
                   code: error.response.data.code,
@@ -138,12 +136,20 @@ router.all("/:serviceName/:target", async (req: Request, res: Response) => {
           break;
         case "PATCH":
           axios
-            .patch(url, {
+          .patch(url, req.body,{
+              
               withCredentials: true,
-              data: req.body,
               headers: { Authorization: req.headers.authorization },
             })
             .then((response) => {
+              if (response.headers["set-cookie"]) {
+                const cookie = response.headers["set-cookie"];
+
+                // Forward the cookie to the end users
+
+                //@ts-ignore
+                res.setHeader("set-cookie", cookie);
+              }
               res.send(response.data);
             })
             .catch((error) => {
