@@ -14,10 +14,10 @@ const client = async () => {
   return await container.resolve(ServiceRegistryService).gets();
 };
 
-router.all("/:serviceName/:target", async (req: Request, res: Response) => {
+router.all("/:serviceName/:target", catchAsync( async (req: Request, res: Response) => {
   const clientDetail = await client();
-  if (clientDetail.length <= 0) {
-    // throw HttpException.noContent("ppp")
+  console.log(clientDetail,"pppp")
+  if (clientDetail?.length <= 0) {
     res.status(StatusCodes.NO_CONTENT).send({
       success: false,
       code: StatusCodes.NO_CONTENT,
@@ -127,10 +127,11 @@ router.all("/:serviceName/:target", async (req: Request, res: Response) => {
               res.send(response.data);
             })
             .catch((error) => {
-              return res.status(error.response.status).json({
-                success: error.response.data.success,
-                code: error.response.data.code,
-                message: error.response.data.message,
+              // if(error.response?.status)
+              return res.status(error?.response?.status||500).json({
+                success: error?.response?.data?.success,
+                code: error?.response?.data?.code,
+                message: error?.response?.data?.message,
               });
             });
           break;
@@ -194,6 +195,6 @@ router.all("/:serviceName/:target", async (req: Request, res: Response) => {
       });
     }
   });
-});
+}));
 
 export default router;
