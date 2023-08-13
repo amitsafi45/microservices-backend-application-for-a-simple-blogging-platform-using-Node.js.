@@ -6,6 +6,7 @@ import { BlogController } from "../controllers/blog.controller";
 import RequestValidator from "../middlewares/RequestValidator.middleware";
 import { CommentDTO, PostDTO, UpdateCommentDTO, UpdatePostDTO } from "../dtos/blog.dto";
 import Authentication from "../middlewares/authentication.middleware";
+import HttpException from "../utils/HttpException";
 const router=Router()
 const iocBlogContainer=container.resolve(BlogController)
 router.post('/',RequestValidator.validate(PostDTO),Authentication.Check(),catchAsync(iocBlogContainer.create.bind(iocBlogContainer)))
@@ -21,4 +22,7 @@ router.post('/like/:postID',Authentication.Check(),catchAsync(iocBlogContainer.p
 router.delete('/like/:postID',Authentication.Check(),catchAsync(iocBlogContainer.postUnLike.bind(iocBlogContainer)))
 router.post('/comment/like/:postID',Authentication.Check(),catchAsync(iocBlogContainer.commentLike.bind(iocBlogContainer)))
 router.delete('/comment/like/:postID',Authentication.Check(),catchAsync(iocBlogContainer.commentUnLike.bind(iocBlogContainer)))
+router.all('/*',(req,res)=>{
+    throw HttpException.notFound("Method Not Found  ")
+  })
 export default router
