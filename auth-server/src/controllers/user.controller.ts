@@ -93,6 +93,7 @@ export class UserController  {
 
   async refresh(req: Request, res: Response):Promise<void>{
     const cookie=JSON.parse(JSON.stringify(req.cookies))
+    console.log(cookie,"fgfg")
     if(!cookie.refresh){
       throw HttpException.forbidden(Message.unAuthorized)
     }

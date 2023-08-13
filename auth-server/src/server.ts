@@ -4,9 +4,7 @@ import middleware from './middlewares';
 import EnvironmentConfiguration from './config/env.config';
 import axios from 'axios';
 import { error } from 'console';
-import { EventEmitter } from 'node:events';
-const myEmitter = new EventEmitter();
-// myEmitter.on('event', () => {
+
 //   console.log('an event occurred!');
 // });
 // myEmitter.emit('event');
@@ -19,6 +17,28 @@ async function bootStrap() {
       console.info(
         `Auth Server started at http://localhost:${EnvironmentConfiguration.PORT}`
       );
+      // const registerService=async()=> await axios.post('http://localhost:4000/service-registry/api/register',{
+      //   "clientName":"amit auth supplier",
+      //   "host":"localhost",
+      //   "port":EnvironmentConfiguration.PORT,
+      //   "status":"LIVE",
+      //   "serviceName":"auth"        
+      // })
+      // await registerService()
+      // console.log("dddd");
+
+
+
+
+
+
+
+
+
+      //  const interval=setInterval(registerService,20*1000);
+      //  const cleanUp=async()=>{
+      //    clearInterval(interval);
+      //  }
 
     //   const register=()=>console.log("first heelll")
 
@@ -43,15 +63,15 @@ async function bootStrap() {
 //     });
 //       myEmitter.emit('ping main server');
 //   });
-//   // const registerService=async()=> await axios.post('http://localhost:4000/service-registry/api/register',{
-//   //     "clientName":"amit auth supplier",
-//   //     "host":"localhost",
-//   //     "port":EnvironmentConfiguration.PORT,
-//   //     "status":"LIVE",
-//   //     "serviceName":"auth"        
-//   //   })
-//   //   registerService().then((response)=>console.log(response.data,"ggg")).catch((error)=>console.log(error,"fff"))
-//   //  console.log("dddd");
+  // const registerService=async()=> await axios.post('http://localhost:4000/service-registry/api/register',{
+  //     "clientName":"amit auth supplier",
+  //     "host":"localhost",
+  //     "port":EnvironmentConfiguration.PORT,
+  //     "status":"LIVE",
+  //     "serviceName":"auth"        
+  //   })
+  //   registerService().then((response)=>console.log(response.data,"ggg")).catch((error)=>console.log(error,"fff"))
+  //  console.log("dddd");
 //   // app.on('listen',async()=>{
 //   //   console.log("object");
 //   //     const registerService=async()=> await axios.post('http://localhost:4000/service-registry/api/register',{
@@ -68,11 +88,45 @@ async function bootStrap() {
 //       //   clearInterval(interval);
 //       //   await 
 //       // }
+
+
  })
-}
+
+ }
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 try {
-  bootStrap();
+   bootStrap();
 
 } catch (error) {
   console.log(error);
@@ -80,4 +134,4 @@ try {
 }
 
     
-    // const interval=setInterval(registerService,20*1000);
+    // const interval=setInterval(registerService,20*1000)

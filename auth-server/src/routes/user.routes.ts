@@ -5,10 +5,10 @@ import RequestValidator from "../middlewares/RequestValidator.middleware";
 import { catchAsync } from "../utils/catchAsync";
 import { container } from "tsyringe";
 import Authentication from "../middlewares/Authentication.middleware";
+import HttpException from "../utils/HttpException";
 const router = Router();
 const userIocContainer=container.resolve(UserController)
-router.post('/check',(req,res)=>{console.log(req.method,req.body) 
-  return res.send("hello sir")})
+
 router.post('/login',
 RequestValidator.validate(LoginDTO),
 catchAsync(userIocContainer.login.bind(userIocContainer))
@@ -38,5 +38,7 @@ router.delete(
   "/deactivate",Authentication.Check(),
   catchAsync(userIocContainer.deactivate.bind(userIocContainer))
 );
-
+router.all('/*',(req,res)=>{
+  throw HttpException.notFound("Method Not Found  ")
+})
 export default router;
