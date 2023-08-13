@@ -5,6 +5,7 @@ import { ServiceRegistryController } from "../controllers/serviceRegistry.contro
 import { container } from "tsyringe";
 import { catchAsync } from "../utils/catchAsync";
 import { PingController } from "../controllers/ping.controller";
+import HttpException from "../utils/HttpException";
 
 const router =Router()
 const serviceRegistryContainer=container.resolve(ServiceRegistryController)
@@ -13,4 +14,7 @@ router.get('/ping',catchAsync(iocContainer.ping.bind(iocContainer)))
 router.post('/register',RequestValidator.validate(ApiDetail),catchAsync(serviceRegistryContainer.create.bind(serviceRegistryContainer)))
 router.patch('/update',RequestValidator.validate(ApiDetail),catchAsync(serviceRegistryContainer.update.bind(serviceRegistryContainer)))
 router.patch('/status',RequestValidator.validate(ServiceStatusDTO),catchAsync(serviceRegistryContainer.updateStatus.bind(serviceRegistryContainer)))
+router.all('/*',(req,res)=>{
+    throw HttpException.notFound("Method Not Found  ")
+  })
 export default router
