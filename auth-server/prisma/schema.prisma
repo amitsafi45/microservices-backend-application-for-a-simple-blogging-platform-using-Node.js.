@@ -59,7 +59,7 @@ model Media {
   id        String    @id @default(uuid())
   name      String
   type      MediaType
-  profile   Profile   @relation(fields: [profileID], references: [id])
+  profile   Profile   @relation(fields: [profileID], references: [id],onDelete: Cascade, onUpdate: Cascade)
   profileID String    @unique @map("profile_id")
   createdAt DateTime? @default(now()) @map("created_at")
   updatedAt DateTime? @map("updated_at")
