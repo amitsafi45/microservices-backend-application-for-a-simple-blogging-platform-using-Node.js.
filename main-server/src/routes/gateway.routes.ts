@@ -18,14 +18,16 @@ router.all(
   "/:serviceName/:target",
   catchAsync(async (req: Request, res: Response) => {
     const clientDetail = await client();
+    console.log(clientDetail, "client");
     if (clientDetail?.length <= 0) {
-      res.status(StatusCodes.NO_CONTENT).send({
+      return res.status(StatusCodes.NO_CONTENT).send({
         success: false,
         code: StatusCodes.NO_CONTENT,
         message: "No one Client Exist",
       });
     }
-    clientDetail.map((endPoint) => {
+    let endPoint: any;
+    for (endPoint of clientDetail) {
       let response;
       if (endPoint.serviceName === req.params.serviceName) {
         if (endPoint.status === Status.DIE) {
@@ -78,10 +80,10 @@ router.all(
                   res.send(response.data);
                 })
                 .catch((error) => {
-                  return res.status(error?.response?.status || 500).json({
-                    success: error?.response?.data?.success||false,
-                    code: error?.response?.data?.code||500,
-                    message: error?.response?.data?.message|| "server not reachable",
+                  return res.status(error?.response?.status).json({
+                    success: error?.response?.data?.success,
+                    code: error?.response?.data?.code,
+                    message: error?.response?.data?.message,
                   });
                 });
             } else {
@@ -104,10 +106,10 @@ router.all(
                   res.send(response.data);
                 })
                 .catch((error) => {
-                  return res.status(error?.response?.status || 500).json({
-                    success: error?.response?.data?.success||false,
-                    code: error?.response?.data?.code||500,
-                    message: error?.response?.data?.message|| "server not reachable",
+                  return res.status(error?.response?.status).json({
+                    success: error?.response?.data?.success,
+                    code: error?.response?.data?.code,
+                    message: error?.response?.data?.message,
                   });
                 });
             }
@@ -129,10 +131,10 @@ router.all(
               })
               .catch((error) => {
                 // if(error.response?.status)
-                return res.status(error?.response?.status || 500).json({
-                  success: error?.response?.data?.success||false,
-                  code: error?.response?.data?.code||500,
-                  message: error?.response?.data?.message|| "server not reachable",
+                return res.status(error?.response?.status).json({
+                  success: error?.response?.data?.success,
+                  code: error?.response?.data?.code,
+                  message: error?.response?.data?.message,
                 });
               });
             break;
@@ -154,10 +156,10 @@ router.all(
                 res.send(response.data);
               })
               .catch((error) => {
-                return res.status(error?.response?.status || 500).json({
-                  success: error?.response?.data?.success||false,
-                  code: error?.response?.data?.code||500,
-                  message: error?.response?.data?.message|| "server not reachable",
+                return res.status(error?.response?.status).json({
+                  success: error?.response?.data?.success,
+                  code: error?.response?.data?.code,
+                  message: error?.response?.data?.message,
                 });
               });
             break;
@@ -173,10 +175,10 @@ router.all(
                 res.send(response.data);
               })
               .catch((error) => {
-                return res.status(error?.response?.status || 500).json({
-                  success: error?.response?.data?.success||false,
-                  code: error?.response?.data?.code||500,
-                  message: error?.response?.data?.message|| "server not reachable",
+                return res.status(error?.response?.status).json({
+                  success: error?.response?.data?.success,
+                  code: error?.response?.data?.code,
+                  message: error?.response?.data?.message,
                 });
               });
             break;
@@ -187,14 +189,8 @@ router.all(
               message: "Method Not Found",
             });
         }
-      } else {
-        return res.status(StatusCodes.NOT_FOUND).json({
-          success: false,
-          code: StatusCodes.NOT_FOUND,
-          message: "Service Not Found",
-        });
       }
-    });
+    }
   })
 );
 
