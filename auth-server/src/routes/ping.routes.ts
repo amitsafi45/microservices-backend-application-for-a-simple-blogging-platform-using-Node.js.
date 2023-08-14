@@ -7,6 +7,6 @@ import HttpException from "../utils/HttpException";
 const router=Router()
 const iocContainer=container.resolve(PingController)
 router.get('/',iocContainer.ping.bind(iocContainer))
-router.get('/verification',catchAsync(Authentication.Check()),iocContainer.verification.bind(iocContainer))
+router.get('/verification',Authentication.Check(),iocContainer.verification.bind(iocContainer))
 
 export default router

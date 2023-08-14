@@ -35,7 +35,7 @@ export default class RequestValidator {
         next(HttpException.badRequest(validationMessages[0]));
       }
 
-      return next();
+       next();
     };
   };
 }

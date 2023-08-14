@@ -30,9 +30,7 @@ export class PostService{
          
             }
           })
-          if(!updatePost){
-            throw HttpException.badRequest(getNotFoundMessage("Post"))
-          }
+        
       }
 
       async get(id:string){
@@ -48,14 +46,13 @@ export class PostService{
        if(!post){
         throw HttpException.badRequest(getNotFoundMessage("Post"))
       }
-      console.log(post,"pppp")
       return post
       }
 
       async gets(){
           return await prisma.post.findMany({
             include:{
-                media:true,
+                media:false ,
                 comment:true,
                 postLikes:true,
             }
@@ -64,5 +61,12 @@ export class PostService{
 
       async delete(id:string){
       await prisma.post.delete({where:{id:id}})
+      }
+
+
+      async myPost(userID:string){
+     return await prisma.post.findMany({where:{
+      authorID:userID
+     }})
       }
 }

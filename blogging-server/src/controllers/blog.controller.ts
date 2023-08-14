@@ -34,6 +34,7 @@ export class BlogController{
 
 
     async update(req:Request,res:Response){
+      await this.postService.get(req.body.postID)
       await this.postService.update(req.body,req.user.id)
       return res.status(StatusCodes.SUCCESS).send(
           createResponse<object>(
@@ -71,6 +72,19 @@ export class BlogController{
           ),
         );
     }
+
+    async myPost(req:Request,res:Response){
+      const post=await this.postService.myPost(req.user.id)
+      return res.status(StatusCodes.SUCCESS).send(
+        createResponse<object>(
+          true,
+          StatusCodes.SUCCESS,
+          FetchMessage("Post"),
+          post
+        ),
+      );
+    }
+
     async delete(req:Request,res:Response){
       if(!isUUID(req.params.postID)){
         throw HttpException.badRequest("Invalid Post ID")

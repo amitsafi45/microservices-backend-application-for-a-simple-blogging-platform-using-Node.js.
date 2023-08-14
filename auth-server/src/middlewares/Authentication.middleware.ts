@@ -11,15 +11,15 @@ export default class Authentication {
   static Check = () => {
     return async (req: Request, res: Response, next: NextFunction) => {
       // *Convert body to class instance
-      const authorization = req?.headers.authorization;
-      if (!authorization||authorization===undefined) {
-     return   next(HttpException.notFound("Token not found"));
+      const authorization = req?.headers?.authorization;
+      if (!authorization) {
+      throw HttpException.notFound("Token not found");
       }
 
       const data = authorization.trim().split(" ");
 
       if (data.length !== 2) {
-       return  next( HttpException.badRequest("Invalid Token"));
+       throw HttpException.badRequest("Invalid Token");
       }
 
       const mode = data[0];
@@ -32,7 +32,7 @@ export default class Authentication {
             EnvironmentConfiguration.ACCESS_TOKEN_SECRET
           );
         } else {
-        return  next( HttpException.unauthorized(Message.unAuthorized));
+        throw  HttpException.unauthorized(Message.unAuthorized);
         }
 
         const { id, email } = data;
@@ -52,7 +52,7 @@ export default class Authentication {
       } catch (err: any) {
         console.error(err.toString());
         
-       return  next(HttpException.unauthorized(Message.unAuthorized));
+       throw HttpException.unauthorized(Message.unAuthorized);
       }
     };
   };

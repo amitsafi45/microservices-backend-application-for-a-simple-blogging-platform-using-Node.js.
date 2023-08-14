@@ -158,6 +158,7 @@ router.all(
                 res.send(response.data);
               })
               .catch((error) => {
+                console.log("skdjfksdjfk",error.response)
                 return res.status(error?.response?.status).json({
                   success: error?.response?.data?.success,
                   code: error?.response?.data?.code,
