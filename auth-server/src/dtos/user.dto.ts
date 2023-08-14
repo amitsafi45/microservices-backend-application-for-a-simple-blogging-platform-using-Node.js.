@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsArray, IsEmail, IsNotEmpty, IsNotEmptyObject, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator";
+import { IsArray, IsEmail, IsNotEmpty, IsNotEmptyObject, IsOptional, IsString, IsStrongPassword, IsUUID, ValidateNested } from "class-validator";
 import { MediaDTO } from "./media.dto";
 
 export class RegisterDTO{
@@ -13,6 +13,7 @@ export class RegisterDTO{
 
    @IsNotEmpty()
    @IsString()
+   @IsStrongPassword()
    password:string
 
 }
