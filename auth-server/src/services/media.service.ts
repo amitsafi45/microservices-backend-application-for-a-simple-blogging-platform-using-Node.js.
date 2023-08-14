@@ -36,7 +36,6 @@ async delete(id:string,connection:any){
     }})
 }
 async updateMedia(data: MediaDTO, profileID: string,userID:string,connection:any){
-  console.log(profileID,"pppppppprofileDTO")
   if (!existsSync(path.join(this.TEMP_FOLDER_PATH, data.type, data.name))) {
     throw HttpException.badRequest('Sorry file does not exists')
   }
@@ -55,7 +54,7 @@ async updateMedia(data: MediaDTO, profileID: string,userID:string,connection:any
 
 async findMedia(profileID:string,connection:any){
   return await connection.media.findFirst({where:{
-    
+    profileID:profileID
   }})
   
   }
