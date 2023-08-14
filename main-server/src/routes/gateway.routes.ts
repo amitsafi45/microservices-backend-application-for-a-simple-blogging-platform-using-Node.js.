@@ -50,7 +50,9 @@ router.all(
               const files = req.files;
 
               if (!files) {
-                return res.status(400).send("No files were uploaded.");
+                return res.status(StatusCodes.BAD_REQUEST).json({success:false,
+                  code:StatusCodes.BAD_REQUEST,
+                  message:"files no were upload",})
               }
 
               const formData = new FormData();

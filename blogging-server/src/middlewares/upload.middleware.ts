@@ -19,7 +19,7 @@ import { autoInjectable } from 'tsyringe'
   single(fieldName: string){
     return async (req: Request, res: Response, next: NextFunction) => {
       if (!req.files) {
-       return next( HttpException.badRequest('No file uploaded'))
+       throw HttpException.badRequest('No file uploaded')
       }
       if (Object.keys(req.files).length !== 1) {
        return next( HttpException.badRequest('Only one file can be uploaded'))
