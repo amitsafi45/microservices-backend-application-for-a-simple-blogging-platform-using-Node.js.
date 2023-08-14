@@ -45,18 +45,21 @@ async function bootStrap() {
   const guard = async () =>
     axios.get(`${EnvironmentConfiguration.MAIN_SERVER_URL}`);
   const task = async () =>
-    await guard()
+     guard()
       .then(async (response) => {
+        console.log("first")
         await serviceRegistry();
       })
       .catch((error) => {
+        clearInterval(taskSet)
         console.info(
           `Main server Not Reachable,Plz verify main server location (in env file:-${EnvironmentConfiguration.MAIN_SERVER_URL})}`
         );
       });
 
-      const interval = 5 * 60 * 1000;
-      setInterval(task, interval);
+      const interval =  10*60 * 1000;
+    const taskSet= setInterval(task, interval);
+
 }
 
 try {
