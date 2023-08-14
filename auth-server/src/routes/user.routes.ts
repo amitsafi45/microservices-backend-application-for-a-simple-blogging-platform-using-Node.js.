@@ -20,7 +20,7 @@ router.post('/profile',RequestValidator.validate(ProfileDTO) ,Authentication.Che
 router.get('/refresh',
 catchAsync(userIocContainer.refresh.bind(userIocContainer))
 )
-router.get('/logout',Authentication.Check(),catchAsync(userIocContainer.logout.bind(userIocContainer)))
+router.get('/logout',catchAsync(userIocContainer.logout.bind(userIocContainer)))
 router.post(
   "/register",
 
