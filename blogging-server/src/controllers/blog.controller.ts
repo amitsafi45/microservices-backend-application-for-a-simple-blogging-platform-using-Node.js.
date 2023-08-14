@@ -151,10 +151,8 @@ const comment=  await this.postService.get(req.params.postID)
 
 
 async  postLike(req:Request,res:Response){
-  if(!isUUID(req.params.postID)){
-    throw HttpException.badRequest("Invalid Post ID")
-  }
-  await this.likesService.postLike(req.params.postID)
+ 
+  await this.likesService.postLike(req.body,req.user.id)
   return res.status(StatusCodes.CREATED).send(
     createResponse<string>(
       true,
@@ -164,10 +162,8 @@ async  postLike(req:Request,res:Response){
   );
 }
 async  postUnLike(req:Request,res:Response){
-  if(!isUUID(req.params.postID)){
-    throw HttpException.badRequest("Invalid Post ID")
-  }
-  await this.likesService.postUnLike(req.params.postID)
+ 
+  await this.likesService.postUnLike(req.body,req.user.id)
   return res.status(StatusCodes.SUCCESS).send(
     createResponse<string>(
       true,
@@ -179,10 +175,8 @@ async  postUnLike(req:Request,res:Response){
 
 }
 async  commentLike(req:Request,res:Response){
-  if(!isUUID(req.params.commentID)){
-    throw HttpException.badRequest("Invalid Comment ID")
-  }
-  await this.likesService.commentLike(req.params.commentID)
+ 
+  await this.likesService.commentLike(req.params.commentID,req.user.id)
   return res.status(StatusCodes.CREATED).send(
     createResponse<string>(
       true,
@@ -192,10 +186,8 @@ async  commentLike(req:Request,res:Response){
   );
 }
 async  commentUnLike(req:Request,res:Response){
-  if(!isUUID(req.params.commentID)){
-    throw HttpException.badRequest("Invalid Comment ID")
-  }
-  await this.likesService.commentUnLike(req.params.commentID)
+ 
+  await this.likesService.commentUnLike(req.params.commentID,req.user.id)
   return res.status(StatusCodes.SUCCESS).send(
     createResponse<string>(
       true,
