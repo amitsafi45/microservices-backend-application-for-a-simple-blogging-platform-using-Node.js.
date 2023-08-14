@@ -8,5 +8,7 @@ const router=Router()
 const iocContainer=container.resolve(PingController)
 router.get('/',iocContainer.ping.bind(iocContainer))
 router.get('/verification',Authentication.Check(),iocContainer.verification.bind(iocContainer))
-
+router.all('/*',(req,res)=>{
+    throw HttpException.notFound("Method Not Found  ")
+  })
 export default router
