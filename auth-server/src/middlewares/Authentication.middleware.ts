@@ -13,13 +13,13 @@ export default class Authentication {
       // *Convert body to class instance
       const authorization = req?.headers?.authorization;
       if (!authorization) {
-      throw HttpException.notFound("Token not found");
+     return next( HttpException.notFound("Token not found"));
       }
 
       const data = authorization.trim().split(" ");
 
       if (data.length !== 2) {
-       throw HttpException.badRequest("Invalid Token");
+       return( HttpException.badRequest("Invalid Token"));
       }
 
       const mode = data[0];
@@ -32,7 +32,7 @@ export default class Authentication {
             EnvironmentConfiguration.ACCESS_TOKEN_SECRET
           );
         } else {
-        throw  HttpException.unauthorized(Message.unAuthorized);
+        return next(  HttpException.unauthorized(Message.unAuthorized));
         }
 
         const { id, email } = data;
@@ -44,7 +44,7 @@ export default class Authentication {
           },
         });
         if (!user) {
-          throw HttpException.notFound(getNotFoundMessage("User"));
+        return  next( HttpException.notFound(getNotFoundMessage("User")));
         }
         const { password, ...rest } = user;
         req.user = rest;
@@ -52,7 +52,7 @@ export default class Authentication {
       } catch (err: any) {
         console.error(err.toString());
         
-       throw HttpException.unauthorized(Message.unAuthorized);
+      return next( HttpException.unauthorized(Message.unAuthorized));
       }
     };
   };
