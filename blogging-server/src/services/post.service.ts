@@ -67,6 +67,13 @@ export class PostService{
       async myPost(userID:string){
      return await prisma.post.findMany({where:{
       authorID:userID
+     },include:{
+      comment:{
+        include:{
+          commentLikes:true
+        }
+      },
+      postLikes:true
      }})
       }
 }

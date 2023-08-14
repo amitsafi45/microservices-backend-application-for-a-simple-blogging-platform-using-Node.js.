@@ -41,7 +41,8 @@ router.all(
         let url;
         if (req.query.action) {
           url = `http://${endPoint.host}:${endPoint.port}/api/${endPoint.serviceName}/${req.params.target}/${req.query.action}`;
-        } else {
+        }
+         else {
           url = `http://${endPoint.host}:${endPoint.port}/api/${endPoint.serviceName}/${req.params.target}`;
         }
         switch (req.method.toString()) {
