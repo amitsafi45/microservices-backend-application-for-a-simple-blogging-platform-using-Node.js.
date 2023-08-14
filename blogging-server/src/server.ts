@@ -7,42 +7,55 @@ import { error } from "console";
 
 const app = express();
 async function bootStrap() {
+  let serviceRegistry: Function;
   await middleware(app);
   app.listen(EnvironmentConfiguration.PORT || 3000, async () => {
     console.info(
       `Blogging Server started at http://localhost:${EnvironmentConfiguration.PORT}`
     );
     const registerService = async () =>
-      await axios.post("http://localhost:4003/service-registry/api/register", {
+      await axios.post("http://localhost:4000/service-registry/api/register", {
         clientName: "BLogging Section",
         host: "localhost",
         port: EnvironmentConfiguration.PORT,
         status: "LIVE",
-        serviceName: "auth",
+        serviceName: "blog",
       });
     const updateService = async (status: string) =>
-      await axios.patch("http://localhost:4003/service-registry/api/update", {
+      await axios.patch("http://localhost:4000/service-registry/api/update", {
         clientName: "Blogging Section",
         host: "localhost",
         port: EnvironmentConfiguration.PORT,
-        status:"DIE",
-        serviceName: "auth",
+        status: status,
+        serviceName: "blog",
       });
-    registerService()
-      .then( (response) => {
-        console.log("Blogging Service register detail in Main server")
+    serviceRegistry = async () =>
+      registerService()
+        .then((response) => {
+          console.log("Blogging Service register detail in Main server");
+        })
+        .catch(async (error) => {
+          if (error.response.status === 409) {
+            await updateService("LIVE");
+            console.log("Blogging Service Updated detail in Main server");
+          }
+        });
+  });
+  const guard = async () =>
+    axios.get("http://localhost:4000/service-registry/api/ping");
+  const task = async () =>
+    await guard()
+      .then(async (response) => {
+        await serviceRegistry();
       })
-      .catch(async (error) => {
-        if (error.response.status===409) {
-          await updateService("LIVE");
-          console.log("Blogging Service Updated detail in Main server")
-        }
-      });
-   
+      .catch((error) => {
+        console.info(
+          "Main server Not Reachable,Plz verify main server location"
+        );
       });
 
- 
-
+  const interval = 20 * 60 * 1000;
+  setInterval(task, interval);
 }
 
 try {

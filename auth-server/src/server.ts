@@ -8,13 +8,14 @@ import { config } from "dotenv";
 
 const app = express();
 async function bootStrap() {
+  let serviceRegistry: Function;
   await middleware(app);
   app.listen(EnvironmentConfiguration.PORT || 3000, async () => {
     console.info(
-      `Auth Server started at http://localhost:${EnvironmentConfiguration.PORT}`
+      `Authentication Server started at http://localhost:${EnvironmentConfiguration.PORT}`
     );
     const registerService = async () =>
-      await axios.post("http://localhost:4003/service-registry/api/register", {
+      await axios.post("http://localhost:4000/service-registry/api/register", {
         clientName: "Authentication Section",
         host: "localhost",
         port: EnvironmentConfiguration.PORT,
@@ -22,42 +23,40 @@ async function bootStrap() {
         serviceName: "auth",
       });
     const updateService = async (status: string) =>
-      await axios.patch("http://localhost:4003/service-registry/api/update", {
+      await axios.patch("http://localhost:4000/service-registry/api/update", {
         clientName: "Authentication Section",
         host: "localhost",
         port: EnvironmentConfiguration.PORT,
-        status:"DIE",
+        status: status,
         serviceName: "auth",
       });
-    registerService()
-      .then( (response) => {
-        console.log("Auth Service register detail in Main server")
+    serviceRegistry = async () =>
+      registerService()
+        .then((response) => {
+          console.log("Authentication Service register detail in Main server");
+        })
+        .catch(async (error) => {
+          if (error.response.status === 409) {
+            await updateService("LIVE");
+            console.log("Authentication Service Updated detail in Main server");
+          }
+        });
+  });
+  const guard = async () =>
+    axios.get("http://localhost:4000/service-registry/api/ping");
+  const task = async () =>
+    await guard()
+      .then(async (response) => {
+        await serviceRegistry();
       })
-      .catch(async (error) => {
-        if (error.response.status===409) {
-          await updateService("LIVE");
-          console.log("Auth Service Updated detail in Main server")
-        }
+      .catch((error) => {
+        console.info(
+          "Main server Not Reachable,Plz verify main server location"
+        );
       });
 
-  //   const interval = setInterval(updateService, 7*60*1000);
-  //   const cleanUp = async () => {
-  //     clearInterval(interval);
-  //     await updateService("DIE");
-  //   }
-  //   process.on("uncaughtException",async()=>{
-  //     await cleanUp();
-  //     process.exit()
-  //         })
-  //   process.on('SIGINT',async()=>{
-  //     await cleanUp()
-  //     process.exit()
-  //   })
-  //  process.on('SIGTERM',async()=>{
-  //   await cleanUp()
-  //   process.exit()
-  //  })
-  });
+  const interval = 20 * 60 * 1000;
+  setInterval(task, interval);
 }
 
 try {
