@@ -9,7 +9,7 @@ import Authentication from "../middlewares/authentication.middleware";
 import HttpException from "../utils/HttpException";
 const router=Router()
 const iocBlogContainer=container.resolve(BlogController)
-router.post('/',RequestValidator.validate(PostDTO),Authentication.Check(),catchAsync(iocBlogContainer.create.bind(iocBlogContainer)))
+router.post('/create',RequestValidator.validate(PostDTO),Authentication.Check(),catchAsync(iocBlogContainer.create.bind(iocBlogContainer)))
 router.patch('/',RequestValidator.validate(UpdatePostDTO),Authentication.Check(),catchAsync(iocBlogContainer.update.bind(iocBlogContainer)))
 router.get('/:postID',Authentication.Check(),catchAsync(iocBlogContainer.get.bind(iocBlogContainer)))
 router.get('/',catchAsync(iocBlogContainer.gets.bind(iocBlogContainer)))

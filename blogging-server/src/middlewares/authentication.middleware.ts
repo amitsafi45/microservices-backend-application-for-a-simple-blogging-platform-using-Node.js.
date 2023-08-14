@@ -10,14 +10,15 @@ export default class Authentication {
     return async (req: Request, res: Response, next: NextFunction) => {
       // *Convert body to class instance
       const authorization = req?.headers.authorization;
+      console.log(authorization,"in blog server")
       if (!authorization) {
-        return next(HttpException.badRequest("11"));
+         throw HttpException.noContent("Token not found");
       }
 
       const data = authorization.trim().split(" ");
 
       if (data.length !== 2) {
-        return next(HttpException.badRequest("22"));
+        throw HttpException.noContent("Token not found");
       }
 
       const mode = data[0];
@@ -29,6 +30,7 @@ export default class Authentication {
           headers: {
             Authorization: authorization,
           },
+          withCredentials:true
         })
         .then((response) => {
           req.user = response.data.data;
