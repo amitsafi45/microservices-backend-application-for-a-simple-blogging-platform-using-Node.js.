@@ -12,7 +12,6 @@ export default class Authentication {
     return async (req: Request, res: Response, next: NextFunction) => {
       // *Convert body to class instance
       const authorization = req?.headers.authorization;
-      console.log(authorization,'lllll');
       if (!authorization||authorization===undefined) {
      return   next(HttpException.notFound("Token not found"));
       }
