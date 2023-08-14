@@ -18,7 +18,6 @@ router.all(
   "/:serviceName/:target",
   catchAsync(async (req: Request, res: Response) => {
     const clientDetail = await client();
-    console.log(clientDetail, "pppp");
     if (clientDetail?.length <= 0) {
       res.status(StatusCodes.NO_CONTENT).send({
         success: false,
@@ -79,10 +78,10 @@ router.all(
                   res.send(response.data);
                 })
                 .catch((error) => {
-                  return res.status(error.response.status).json({
-                    success: error.response.data.success,
-                    code: error.response.data.code,
-                    message: error.response.data.message,
+                  return res.status(error?.response?.status || 500).json({
+                    success: error?.response?.data?.success||false,
+                    code: error?.response?.data?.code||500,
+                    message: error?.response?.data?.message|| "server not reachable",
                   });
                 });
             } else {
@@ -105,10 +104,10 @@ router.all(
                   res.send(response.data);
                 })
                 .catch((error) => {
-                  return res.status(error.response.status).json({
-                    success: error.response.data.success,
-                    code: error.response.data.code,
-                    message: error.response.data.message,
+                  return res.status(error?.response?.status || 500).json({
+                    success: error?.response?.data?.success||false,
+                    code: error?.response?.data?.code||500,
+                    message: error?.response?.data?.message|| "server not reachable",
                   });
                 });
             }
@@ -155,10 +154,10 @@ router.all(
                 res.send(response.data);
               })
               .catch((error) => {
-                return res.status(error.response.status).json({
-                  success: error.response.data.success,
-                  code: error.response.data.code,
-                  message: error.response.data.message,
+                return res.status(error?.response?.status || 500).json({
+                  success: error?.response?.data?.success||false,
+                  code: error?.response?.data?.code||500,
+                  message: error?.response?.data?.message|| "server not reachable",
                 });
               });
             break;
@@ -174,10 +173,10 @@ router.all(
                 res.send(response.data);
               })
               .catch((error) => {
-                return res.status(error.response.status).json({
-                  success: error.response.data.success,
-                  code: error.response.data.code,
-                  message: error.response.data.message,
+                return res.status(error?.response?.status || 500).json({
+                  success: error?.response?.data?.success||false,
+                  code: error?.response?.data?.code||500,
+                  message: error?.response?.data?.message|| "server not reachable",
                 });
               });
             break;
@@ -189,9 +188,9 @@ router.all(
             });
         }
       } else {
-        return res.status(StatusCodes.METHOD_NOT_ALLOWED).json({
+        return res.status(StatusCodes.NOT_FOUND).json({
           success: false,
-          code: StatusCodes.METHOD_NOT_ALLOWED,
+          code: StatusCodes.NOT_FOUND,
           message: "Service Not Found",
         });
       }

@@ -28,34 +28,34 @@ async function bootStrap() {
         status: status,
         serviceName: "blogging",
       });
-    registerService()
-      .then(async (response) => {
-        console.log(response.data);
-      })
-      .catch(async (error) => {
-        if (error.response.status === 409) {
-          await updateService("LIVE");
-        }
+    // registerService()
+      // .then(async (response) => {
+      //   console.log(response.data);
+      // })
+      // .catch(async (error) => {
+      //   if (error.response.status === 409) {
+      //     await updateService("LIVE");
+      //   }
       });
 
-    const interval = setInterval(updateService, 5*60*1000);
-    const cleanUp = async () => {
-      clearInterval(interval);
-      await updateService("DIE");
-    }
-    process.on("uncaughtException",async()=>{
-      await cleanUp();
-      process.exit()
-          })
-    process.on('SIGINT',async()=>{
-      await cleanUp()
-      process.exit()
-    })
-   process.on('SIGTERM',async()=>{
-    await cleanUp()
-    process.exit()
-   })
-  });
+  //   const interval = setInterval(updateService, 5*60*1000);
+  //   const cleanUp = async () => {
+  //     clearInterval(interval);
+  //     await updateService("DIE");
+  //   }
+  //   process.on("uncaughtException",async()=>{
+  //     await cleanUp();
+  //     process.exit()
+  //         })
+  //   process.on('SIGINT',async()=>{
+  //     await cleanUp()
+  //     process.exit()
+  //   })
+  //  process.on('SIGTERM',async()=>{
+  //   await cleanUp()
+  //   process.exit()
+  //  })
+  //});
 }
 
 try {

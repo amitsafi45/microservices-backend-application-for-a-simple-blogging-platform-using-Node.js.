@@ -38,23 +38,23 @@ async function bootStrap() {
         }
       });
 
-    const interval = setInterval(updateService, 7*60*1000);
-    const cleanUp = async () => {
-      clearInterval(interval);
-      await updateService("DIE");
-    }
-    process.on("uncaughtException",async()=>{
-      await cleanUp();
-      process.exit()
-          })
-    process.on('SIGINT',async()=>{
-      await cleanUp()
-      process.exit()
-    })
-   process.on('SIGTERM',async()=>{
-    await cleanUp()
-    process.exit()
-   })
+  //   const interval = setInterval(updateService, 7*60*1000);
+  //   const cleanUp = async () => {
+  //     clearInterval(interval);
+  //     await updateService("DIE");
+  //   }
+  //   process.on("uncaughtException",async()=>{
+  //     await cleanUp();
+  //     process.exit()
+  //         })
+  //   process.on('SIGINT',async()=>{
+  //     await cleanUp()
+  //     process.exit()
+  //   })
+  //  process.on('SIGTERM',async()=>{
+  //   await cleanUp()
+  //   process.exit()
+  //  })
   });
 }
 
