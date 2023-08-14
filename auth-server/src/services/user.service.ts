@@ -19,6 +19,7 @@ import { ConnectorType } from "@prisma/client/runtime/library";
 @autoInjectable()
 export class UserService {
   async register(data: RegisterDTO): Promise<void> {
+
     await prisma.user.create({
       data: {
         username: data.username,
@@ -127,8 +128,6 @@ export class UserService {
     userID: string,
     connection: any
   ) {
-    console.log(userID, "llllllopoppop");
-    console.log(profileData, "profile data");
     const p = await connection.profile.update({
       where: {
         userID: userID,
@@ -152,5 +151,13 @@ export class UserService {
         id: id,
       },
     });
+  }
+  async getUserByEmail(email:string){
+    const user = await prisma.user.findFirst({
+      where: {
+        email:email,
+      },
+    });
+    return user
   }
 }

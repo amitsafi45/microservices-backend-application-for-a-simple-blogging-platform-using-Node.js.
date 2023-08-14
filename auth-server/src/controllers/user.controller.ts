@@ -131,7 +131,11 @@ export class UserController {
   }
 
   async register(req: Request, res: Response) {
-    const d = await this.userService.register(req.body);
+    const isEmailExistUser=await this.userService.getUserByEmail(req.body.email)
+    if(isEmailExistUser){
+     throw HttpException.conflict("Invalid Email or Password")
+    }
+   await this.userService.register(req.body);
     return res
       .status(StatusCodes.CREATED)
       .send(
