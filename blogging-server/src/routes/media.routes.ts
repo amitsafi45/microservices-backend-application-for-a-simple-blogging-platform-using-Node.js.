@@ -7,7 +7,7 @@ import HttpException from "../utils/HttpException"
 const router = Router()
 const iocMediaContainer=container.resolve(MediaController)
 const iocUploadContainer=container.resolve(Upload)
-router.post('/upload/single', iocUploadContainer.single("media").bind(iocUploadContainer), catchAsync(iocMediaContainer.uploadSingle.bind(iocMediaContainer)))
+router.post('/upload-single', iocUploadContainer.single("media").bind(iocUploadContainer), catchAsync(iocMediaContainer.uploadSingle.bind(iocMediaContainer)))
 router.all('/*',(req,res)=>{
     throw HttpException.notFound("Method Not Found  ")
   })

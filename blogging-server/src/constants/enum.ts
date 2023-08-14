@@ -7,5 +7,5 @@ export enum Mode{
 }
 
 export enum MediaType{
-    PROFILE="PROFILE"
+    BLOG="BLOG"
 }

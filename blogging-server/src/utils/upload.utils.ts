@@ -24,7 +24,7 @@ constructor(){
       let maxFileSize: number
   
       switch (type) {
-        case MediaType.PROFILE:
+        case MediaType.BLOG:
           supportedExtensions = ['.png', '.jpg', '.jpeg']
           maxFileSize = 2 * 1024 * 1024 //* 2 MB
           break;
