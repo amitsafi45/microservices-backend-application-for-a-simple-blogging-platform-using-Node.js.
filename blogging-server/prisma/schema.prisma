@@ -8,17 +8,17 @@ datasource db {
 }
 
 model Post {
-  id          String     @id @default(uuid())
-  title       String
-  content     String
-  authorID    String
-  tags     String[]
-  comment Comment[]
-  postLikes   PostLike[]
-  media       Media[]
-  createdAt   DateTime   @default(now()) @map("created_at")
-  updatedAt   DateTime?  @map("updated_at")
-  deletedAt   DateTime?  @map("deleted_at")
+  id        String     @id @default(uuid())
+  title     String
+  content   String
+  authorID  String
+  tags      String[]
+  comment   Comment[]
+  postLikes PostLike[]
+  media     Media[]
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime?  @map("updated_at")
+  deletedAt DateTime?  @map("deleted_at")
 
   @@map("post")
 }
@@ -38,9 +38,9 @@ model Media {
 model Comment {
   id            String        @id @default(uuid())
   post          Post          @relation(fields: [postID], references: [id])
-  postID        String         @map("post_id")
+  postID        String        @map("post_id")
   commentLikes  CommentLike[]
-  content      String
+  content       String
   commentatorID String        @map("commentator_id")
   createdAt     DateTime      @default(now()) @map("created_at")
   updatedAt     DateTime?     @map("updated_at")
@@ -48,10 +48,10 @@ model Comment {
 }
 
 model PostLike {
-  id     String @id @default(uuid())
-  post   Post   @relation(fields: [postID], references: [id])
-  postID String @map("post_id")
-
+  id        String    @id @default(uuid())
+  post      Post      @relation(fields: [postID], references: [id])
+  postID    String    @map("post_id")
+  userID    String    @map("user_id")
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
@@ -63,6 +63,7 @@ model CommentLike {
   id        String    @id @default(uuid())
   comment   Comment?  @relation(fields: [commentID], references: [id])
   commentID String?   @map("comment_id")
+  userID    String    @map("user_id")
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
