@@ -43,7 +43,7 @@ async function bootStrap() {
         });
   });
   const guard = async () =>
-    axios.get("http://localhost:4000/service-registry/api/ping");
+    axios.get(`${EnvironmentConfiguration.MAIN_SERVER_URL}`);
   const task = async () =>
     await guard()
       .then(async (response) => {
@@ -51,17 +51,18 @@ async function bootStrap() {
       })
       .catch((error) => {
         console.info(
-          "Main server Not Reachable,Plz verify main server location"
+          `Main server Not Reachable,Plz verify main server location (in env file:-${EnvironmentConfiguration.MAIN_SERVER_URL})}`
         );
       });
 
-  const interval = 20 * 60 * 1000;
-  setInterval(task, interval);
+      const interval = 5 * 60 * 1000;
+      setInterval(task, interval);
 }
 
 try {
   bootStrap();
 } catch (error) {
+  
   console.log(error);
   process.exit(1);
 }

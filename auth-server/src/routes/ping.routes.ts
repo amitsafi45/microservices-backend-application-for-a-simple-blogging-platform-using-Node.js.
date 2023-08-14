@@ -7,8 +7,6 @@ import HttpException from "../utils/HttpException";
 const router=Router()
 const iocContainer=container.resolve(PingController)
 router.get('/',iocContainer.ping.bind(iocContainer))
-router.get('/verification',catchAsync(Authentication.Check()),iocContainer.verification)
-router.all('/*',(req,res)=>{
-    throw HttpException.notFound("Method Not Found  ")
-  })
+router.get('/verification',catchAsync(Authentication.Check()),iocContainer.verification.bind(iocContainer))
+
 export default router
