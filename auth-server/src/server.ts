@@ -4,6 +4,7 @@ import middleware from "./middlewares";
 import EnvironmentConfiguration from "./config/env.config";
 import axios from "axios";
 import { error } from "console";
+import { config } from "dotenv";
 
 const app = express();
 async function bootStrap() {
@@ -13,7 +14,7 @@ async function bootStrap() {
       `Auth Server started at http://localhost:${EnvironmentConfiguration.PORT}`
     );
     const registerService = async () =>
-      await axios.post("http://localhost:4000/service-registry/api/register", {
+      await axios.post("http://localhost:4003/service-registry/api/register", {
         clientName: "Authentication Section",
         host: "localhost",
         port: EnvironmentConfiguration.PORT,
@@ -21,20 +22,21 @@ async function bootStrap() {
         serviceName: "auth",
       });
     const updateService = async (status: string) =>
-      await axios.patch("http://localhost:4000/service-registry/api/register", {
+      await axios.patch("http://localhost:4003/service-registry/api/update", {
         clientName: "Authentication Section",
         host: "localhost",
         port: EnvironmentConfiguration.PORT,
-        status: status,
+        status:"DIE",
         serviceName: "auth",
       });
     registerService()
-      .then(async (response) => {
-        console.log(response.data);
+      .then( (response) => {
+        console.log("Auth Service register detail in Main server")
       })
       .catch(async (error) => {
-        if (error.response.status === 409) {
+        if (error.response.status===409) {
           await updateService("LIVE");
+          console.log("Auth Service Updated detail in Main server")
         }
       });
 

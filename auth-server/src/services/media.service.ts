@@ -35,7 +35,6 @@ async delete(id:string,connection:any){
       id:id
     }})
 }
-
 async updateMedia(data: MediaDTO, profileID: string,userID:string,connection:any){
   console.log(profileID,"pppppppprofileDTO")
   if (!existsSync(path.join(this.TEMP_FOLDER_PATH, data.type, data.name))) {

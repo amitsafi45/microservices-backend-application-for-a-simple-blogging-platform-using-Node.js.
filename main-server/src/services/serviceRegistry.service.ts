@@ -22,6 +22,7 @@ select:{
     })
 }
    async update(data:ApiDetail){
+    console.log(data,"llop")
        const client=await prisma.serviceRegistry.update({
         where:{
             serviceName:data.serviceName
@@ -30,7 +31,7 @@ select:{
         
        })
        if(!client){
-        throw HttpException.badRequest("Client not found")
+        throw HttpException.notFound("Client not found")
        }
 
    }

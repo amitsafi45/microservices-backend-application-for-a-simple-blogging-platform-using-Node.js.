@@ -6,7 +6,7 @@ import { autoInjectable } from "tsyringe";
 @autoInjectable()
 export class PingController {
  async ping(req: Request, res: Response){
-    const response = createResponse<string>(  "success",
+    const response = createResponse<string>(true,
     StatusCodes.SUCCESS,
     "Pong");
     
