@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "../constants/statusCodes";
 import { IUser, IUserController } from "../interfaces/user.interface";
 import { UserService } from "../services/user.service";
@@ -40,19 +40,27 @@ export class UserController {
     this.mediaService = mediaService; // Use the IOC container
   }
 
-  async logout(req: Request, res: Response) {
+  async logout(req: Request, res: Response,next:NextFunction) {
     const cookie = JSON.parse(JSON.stringify(req.cookies));
+    console.log(cookie)
     if (!cookie.refresh) {
-      throw HttpException.noContent("Token not found");
+     return  res.status(StatusCodes.NOT_FOUND).send(
+        createResponse<object>(
+          true,
+          StatusCodes.NOT_FOUND,
+          "Refresh Token Not Found",
+          
+        )
+      );
     }
     res.clearCookie("refresh", {
       httpOnly: true, //accessible only by web server
       secure: true, //https
       sameSite: "none", //cross-site cookie
     });
-    res
+  return  res
       .status(StatusCodes.SUCCESS)
-      .send(createResponse<object>(true, StatusCodes.SUCCESS, Message.logout));
+      .json(createResponse<object>(true, StatusCodes.SUCCESS, Message.logout));
   }
 
   async login(req: Request, res: Response): Promise<void> {
