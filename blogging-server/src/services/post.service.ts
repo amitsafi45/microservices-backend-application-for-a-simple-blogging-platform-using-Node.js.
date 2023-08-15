@@ -3,6 +3,7 @@ import { PostDTO, UpdatePostDTO } from "../dtos/blog.dto";
 import { prisma } from "../config/database.config";
 import HttpException from "../utils/HttpException";
 import { getNotFoundMessage } from "../utils/responseMessage.utils";
+import { skip } from "node:test";
 
 @autoInjectable()
 export class PostService{
@@ -49,14 +50,19 @@ export class PostService{
       return post
       }
 
-      async gets(){
-          return await prisma.post.findMany({
+      async gets(page:number,perPage:number){
+        const skipCount = (page - 1) * perPage;
+          const data= await prisma.post.findMany({
             include:{
                 media:false ,
                 comment:true,
                 postLikes:true,
-            }
+            },
+            skip:skipCount,
+            take:perPage
           })
+        const dataCount=await prisma.post.count()
+        return{list:data,count:dataCount}
       }
 
       async delete(id:string){

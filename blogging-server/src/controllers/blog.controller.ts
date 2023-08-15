@@ -5,10 +5,11 @@ import { createResponse } from "../utils/response";
 import { CreatedMessage, FetchMessage, UpdatedMessage, deletedMessage } from "../utils/responseMessage.utils";
 import { StatusCodes } from "../constants/statusCodes";
 import createUUID from "../utils/genrateUUID";
-import { isUUID } from "class-validator";
+import { isNumber, isUUID } from "class-validator";
 import HttpException from "../utils/HttpException";
 import { CommentService } from "../services/comment.service";
 import { LikesService } from "../services/likes.service";
+import { getPagingData } from "../utils/pagination";
 
 @autoInjectable()
 export class BlogController{
@@ -46,13 +47,31 @@ export class BlogController{
     }
 
     async gets(req:Request,res:Response){
-   const post=   await this.postService.gets()
+      console.log(req.query.page,"hhhh")
+      if(!isNumber(Number(req.query.page))&&!isNumber(Number(req.query.perPage))){
+        return res.status(StatusCodes.BAD_REQUEST).send(
+          createResponse<object>(
+            false,
+            StatusCodes.BAD_REQUEST,
+            "page & perPage should be number",
+          ),
+        );
+      }
+   const{list,count}=   await this.postService.gets(Number(req.query.page),Number(req.query.perPage))
+   const {total, totalPages, currentPage, perPage}=getPagingData(count,Number(req.query.page),Number(req.query.perPage))
+
+console.log(list,"list")
       return res.status(StatusCodes.SUCCESS).send(
           createResponse<object>(
             true,
             StatusCodes.SUCCESS,
             FetchMessage("Post"),
-            post
+            undefined,
+            list,
+            total,
+           currentPage,
+            perPage,
+           totalPages
           )
         );
     }

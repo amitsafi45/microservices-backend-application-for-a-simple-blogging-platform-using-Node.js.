@@ -41,6 +41,9 @@ router.all(
         let url;
         if (req.query.action) {
           url = `http://${endPoint.host}:${endPoint.port}/api/${endPoint.serviceName}/${req.params.target}/${req.query.action}`;
+        }else if(req.query.page&&req.query.perPage){
+          url = `http://${endPoint.host}:${endPoint.port}/api/${endPoint.serviceName}/${req.params.target}?page=${req.query.page}&perPage=${req.query.perPage}`;
+      
         }
          else {
           url = `http://${endPoint.host}:${endPoint.port}/api/${endPoint.serviceName}/${req.params.target}`;
@@ -123,6 +126,7 @@ router.all(
               .get(url, {
                 withCredentials: true,
                 data: req.body,
+                
 
                 headers: {
                   Authorization: req.headers.authorization,
