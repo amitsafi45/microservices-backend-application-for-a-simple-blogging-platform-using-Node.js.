@@ -13,7 +13,6 @@ export default class Authentication {
       // *Convert body to class instance
       try {
         const authorization = req?.headers?.authorization;
-        console.log("in blog server");
         if (!authorization) {
           return next(HttpException.notFound("Token not found"));
         }
@@ -36,7 +35,6 @@ export default class Authentication {
         );
 
         req.user = responses?.data?.data;
-        console.log(req.user);
         next();
       } catch (error: any) {
         return res.status(error?.response?.status).json({

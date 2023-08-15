@@ -22,7 +22,6 @@ select:{
     })
 }
    async update(data:ApiDetail){
-    console.log(data,"llop")
        const client=await prisma.serviceRegistry.update({
         where:{
             serviceName:data.serviceName

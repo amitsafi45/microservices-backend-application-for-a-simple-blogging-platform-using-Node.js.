@@ -4,7 +4,6 @@ import { Request, Response, response } from "express";
 import { createResponse } from "../utils/response";
 import { CreatedMessage, FetchMessage, UpdatedMessage, deletedMessage } from "../utils/responseMessage.utils";
 import { StatusCodes } from "../constants/statusCodes";
-import createUUID from "../utils/genrateUUID";
 import { isNumber, isUUID } from "class-validator";
 import HttpException from "../utils/HttpException";
 import { CommentService } from "../services/comment.service";
